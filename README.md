@@ -63,6 +63,21 @@ Parses the current stock fundamentals from sg.finance.yahoo, and puts them into 
 
 ### stockPrediction.py
 
-The machine learning. Uses a SVM to fit the data, then predicts the outcome. Returns a list of stocks to invest in. 
+The machine learning. Uses a SVM to fit the data, then predicts the outcome. Returns a list of stocks to invest in.
 
 ## Dependencies
+
+Being lazy, I have copied all the unique import statements.
+
+```python
+import numpy as np
+from sklearn import svm, preprocessing
+import pandas as pd
+from collections import Counter
+import os
+import re
+import time
+import urllib.request
+from datetime import datetime
+from Quandl import Quandl
+```
