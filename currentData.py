@@ -2,97 +2,97 @@ import pandas as pd
 import os
 import re
 
+
 # This code puts the current data made by dataPull.py into a pandas dataframe.
 
 
 def forward(gather=["Total Debt/Equity",
-                      'Trailing P/E',
-                      'Price/Sales',
-                      'Price/Book',
-                      'Profit Margin',
-                      'Operating Margin',
-                      'Return on Assets',
-                      'Return on Equity',
-                      'Revenue Per Share',
-                      'Market Cap',
-                        'Enterprise Value',
-                        'Forward P/E',
-                        'PEG Ratio',
-                        'Enterprise Value/Revenue',
-                        'Enterprise Value/EBITDA',
-                        'Revenue',
-                        'Gross Profit',
-                        'EBITDA',
-                        'Net Income Avl to Common ',
-                        'Diluted EPS',
-                        'Earnings Growth',
-                        'Revenue Growth',
-                        'Total Cash',
-                        'Total Cash Per Share',
-                        'Total Debt',
-                        'Current Ratio',
-                        'Book Value Per Share',
-                        'Cash Flow',
-                        'Beta',
-                        'Held by Insiders',
-                        'Held by Institutions',
-                        'Shares Short (as of',
-                        'Short Ratio',
-                        'Short % of Float',
-                        'Shares Short (prior ']):
-
-    df = pd.DataFrame(columns = ['Date',
-                                 'Unix',
-                                 'Ticker',
-                                 'Price',
-                                 'stock_p_change',
-                                 'SP500',
-                                 'sp500_p_change',
-                                 'Difference',
-                                 ##############
-                                 'DE Ratio',
-                                 'Trailing P/E',
-                                 'Price/Sales',
-                                 'Price/Book',
-                                 'Profit Margin',
-                                 'Operating Margin',
-                                 'Return on Assets',
-                                 'Return on Equity',
-                                 'Revenue Per Share',
-                                 'Market Cap',
-                                 'Enterprise Value',
-                                 'Forward P/E',
-                                 'PEG Ratio',
-                                 'Enterprise Value/Revenue',
-                                 'Enterprise Value/EBITDA',
-                                 'Revenue',
-                                 'Gross Profit',
-                                 'EBITDA',
-                                 'Net Income Avl to Common ',
-                                 'Diluted EPS',
-                                 'Earnings Growth',
-                                 'Revenue Growth',
-                                 'Total Cash',
-                                 'Total Cash Per Share',
-                                 'Total Debt',
-                                 'Current Ratio',
-                                 'Book Value Per Share',
-                                 'Cash Flow',
-                                 'Beta',
-                                 'Held by Insiders',
-                                 'Held by Institutions',
-                                 'Shares Short (as of',
-                                 'Short Ratio',
-                                 'Short % of Float',
-                                 'Shares Short (prior ',
-                                 ##############
-                                 'Status'])
+                    'Trailing P/E',
+                    'Price/Sales',
+                    'Price/Book',
+                    'Profit Margin',
+                    'Operating Margin',
+                    'Return on Assets',
+                    'Return on Equity',
+                    'Revenue Per Share',
+                    'Market Cap',
+                    'Enterprise Value',
+                    'Forward P/E',
+                    'PEG Ratio',
+                    'Enterprise Value/Revenue',
+                    'Enterprise Value/EBITDA',
+                    'Revenue',
+                    'Gross Profit',
+                    'EBITDA',
+                    'Net Income Avl to Common ',
+                    'Diluted EPS',
+                    'Earnings Growth',
+                    'Revenue Growth',
+                    'Total Cash',
+                    'Total Cash Per Share',
+                    'Total Debt',
+                    'Current Ratio',
+                    'Book Value Per Share',
+                    'Cash Flow',
+                    'Beta',
+                    'Held by Insiders',
+                    'Held by Institutions',
+                    'Shares Short (as of',
+                    'Short Ratio',
+                    'Short % of Float',
+                    'Shares Short (prior ']):
+    df = pd.DataFrame(columns=['Date',
+                               'Unix',
+                               'Ticker',
+                               'Price',
+                               'stock_p_change',
+                               'SP500',
+                               'sp500_p_change',
+                               'Difference',
+                               ##############
+                               'DE Ratio',
+                               'Trailing P/E',
+                               'Price/Sales',
+                               'Price/Book',
+                               'Profit Margin',
+                               'Operating Margin',
+                               'Return on Assets',
+                               'Return on Equity',
+                               'Revenue Per Share',
+                               'Market Cap',
+                               'Enterprise Value',
+                               'Forward P/E',
+                               'PEG Ratio',
+                               'Enterprise Value/Revenue',
+                               'Enterprise Value/EBITDA',
+                               'Revenue',
+                               'Gross Profit',
+                               'EBITDA',
+                               'Net Income Avl to Common ',
+                               'Diluted EPS',
+                               'Earnings Growth',
+                               'Revenue Growth',
+                               'Total Cash',
+                               'Total Cash Per Share',
+                               'Total Debt',
+                               'Current Ratio',
+                               'Book Value Per Share',
+                               'Cash Flow',
+                               'Beta',
+                               'Held by Insiders',
+                               'Held by Institutions',
+                               'Shares Short (as of',
+                               'Short Ratio',
+                               'Short % of Float',
+                               'Shares Short (prior ',
+                               ##############
+                               'Status'])
 
     file_list = os.listdir("forward")
 
     if '.DS_Store' in file_list:
-                    idx = file_list.index('.DS_Store')
-                    del file_list[idx]
+        idx = file_list.index('.DS_Store')
+        del file_list[idx]
 
     print(file_list)
 
@@ -117,10 +117,9 @@ def forward(gather=["Total Debt/Equity",
 
                     value_list.append(value)
 
-                except Exception as e:
+                except Exception:
                     value = 'N/A'
                     value_list.append(value)
-
 
             if value_list.count("N/A") > 0:
                 pass
@@ -134,7 +133,7 @@ def forward(gather=["Total Debt/Equity",
                                 'sp500_p_change': "N/A",
                                 'Difference': "N/A",
                                 'DE Ratio': value_list[0],
-                                #'Market Cap': value_list[1],
+                                # 'Market Cap': value_list[1],
                                 'Trailing P/E': value_list[1],
                                 'Price/Sales': value_list[2],
                                 'Price/Book': value_list[3],
@@ -148,7 +147,7 @@ def forward(gather=["Total Debt/Equity",
                                 'Forward P/E': value_list[11],
                                 'PEG Ratio': value_list[12],
                                 'Enterprise Value/Revenue': value_list[13],
-                                'Enterprise Value/EBITDA':value_list[14],
+                                'Enterprise Value/EBITDA': value_list[14],
                                 'Revenue': value_list[15],
                                 'Gross Profit': value_list[16],
                                 'EBITDA': value_list[17],
@@ -169,10 +168,11 @@ def forward(gather=["Total Debt/Equity",
                                 'Short Ratio': value_list[32],
                                 'Short % of Float': value_list[33],
                                 'Shares Short (prior ': value_list[34],
-                                'Status': "N/A"}, ignore_index = True)
-        except Exception as e:
+                                'Status': "N/A"}, ignore_index=True)
+        except Exception:
             pass
 
         df.to_csv("forward_sample_NO_NA.csv")
+
 
 forward()
