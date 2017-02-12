@@ -4,6 +4,7 @@ import time
 import re
 from datetime import datetime
 
+
 # Enter the path to intraQuarter
 path = "/Users/User/intraQuarter"
 
@@ -138,7 +139,7 @@ def key_stats(gather=["Total Debt/Equity",
 
                             value_list.append(value)
 
-                        except Exception as e:
+                        except Exception:
                             value = 'N/A'
                             value_list.append(value)
 

@@ -1,9 +1,36 @@
 import pandas as pd
 import os
 import re
+import time
+import urllib.request
+
+path = "/Users/User/intraQuarter"
 
 
-# This code puts the current data made by dataPull.py into a pandas dataframe.
+def check_yahoo():
+    statspath = path + '/_KeyStats'
+    stock_list = [x[0] for x in os.walk(statspath)]
+
+    for each_dir in stock_list[1:]:
+        try:
+            each_dir = each_dir.split("/Users/User/intraQuarter/_KeyStats/")[1]
+            link = "http://sg.finance.yahoo.com/q/ks?s=" + each_dir.upper() + "+Key+Statistics"
+            resp = urllib.request.urlopen(link).read()
+
+            save = "forward/" + str(each_dir) + ".html"
+            store = open(save, "w")
+            store.write(str(resp))
+            store.close()
+
+        except Exception as e:
+            print(str(e))
+            time.sleep(2)
+
+
+check_yahoo()
+
+
+# This code puts the current data made by check_yahoo() into a dataframe then csv.
 
 
 def forward(gather=["Total Debt/Equity",
