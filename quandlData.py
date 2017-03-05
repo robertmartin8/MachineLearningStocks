@@ -2,8 +2,8 @@ import pandas as pd
 import os
 from Quandl import Quandl
 
+# Obviously replace with your own path and API key.
 path = "/Users/User/intraQuarter"
-
 auth_tok = "enteryourkey"
 
 
@@ -17,6 +17,8 @@ def stock_prices():
             ticker = each_dir.split("/Users/User/intraQuarter/_KeyStats/")[1]
             print(ticker)
             name = "WIKI/" + ticker.upper()
+
+            # Query Quandl, using the standard format, e.g WIKI/AAPL.
             data = Quandl.get(name,
                               trim_start="2000-12-12",
                               trim_end="2014-12-30",

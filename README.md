@@ -11,7 +11,7 @@ The program looks at historical stock fundamentals (e.g PE ratio, Debt/equity et
 
 Then, we feed in the current stock fundamentals. The program should then output a list of stocks which have 'good fundamentals', which in the past have corresponded to a price increase.
 
-Note that this project *does not include* all the backtesting etc. It is just the final product. During the backtesting, I was getting returns of about 17%, which is quite a decent outperformance of the market.
+Note that this repository *does not include* all the backtesting etc. It is just the final product. During the backtesting, I was getting returns of about 17%, which is quite a decent outperformance of the market.
 
 All stocks are US based, from the S&P500. This also behaves as our benchmark.
 

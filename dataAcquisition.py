@@ -4,12 +4,15 @@ import time
 import re
 from datetime import datetime
 
+# How much a stock has to outperform the S&P500 to be considered a success. Subjective.
+how_much_better = 5
+
 
 # Enter the path to intraQuarter
 path = "/Users/User/intraQuarter"
 
 
-# The list of features we will be looking at
+# The list of features we will be looking at. No choice but to hard code it.
 def key_stats(gather=["Total Debt/Equity",
                       'Trailing P/E',
                       'Price/Sales',
@@ -45,8 +48,9 @@ def key_stats(gather=["Total Debt/Equity",
                       'Short Ratio',
                       'Short % of Float',
                       'Shares Short (prior ']):
+
     statspath = path + '/_KeyStats'
-    stock_list = [x[0] for x in os.walk(statspath)]  # creates array containing directory locations of stock
+    stock_list = [x[0] for x in os.walk(statspath)]  # creates list containing directory locations of stock
 
     df = pd.DataFrame(columns=['Date',
                                'Unix',
@@ -56,7 +60,6 @@ def key_stats(gather=["Total Debt/Equity",
                                'SP500',
                                'sp500_p_change',
                                'Difference',
-                               ##############
                                'DE Ratio',
                                'Trailing P/E',
                                'Price/Sales',
@@ -92,7 +95,6 @@ def key_stats(gather=["Total Debt/Equity",
                                'Short Ratio',
                                'Short % of Float',
                                'Shares Short (prior ',
-                               ##############
                                'Status'])
 
     sp500_df = pd.DataFrame.from_csv("YAHOO-INDEX_GSPC.csv")
@@ -128,6 +130,7 @@ def key_stats(gather=["Total Debt/Equity",
 
                     for each_data in gather:
                         try:
+                            # Use a regex to find the value associated with the variable of interest.
                             regex = re.escape(each_data) + r'.*?(\d{1,8}\.\d{1,8}M?B?|N/A)%?</td>'
                             value = re.search(regex, source)
                             value = (value.group(1))
@@ -204,7 +207,7 @@ def key_stats(gather=["Total Debt/Equity",
                     difference = stock_p_change - sp500_p_change
 
                     # If the stock outperformed the SP500 by 5%, label it 'outperform'.
-                    if difference > 5:
+                    if difference > how_much_better:
                         status = "outperform"
                     else:
                         status = "underperform"

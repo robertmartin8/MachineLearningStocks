@@ -4,6 +4,7 @@ import re
 import time
 import urllib.request
 
+# Enter your own path.
 path = "/Users/User/intraQuarter"
 
 
@@ -68,6 +69,7 @@ def forward(gather=["Total Debt/Equity",
                     'Short Ratio',
                     'Short % of Float',
                     'Shares Short (prior ']):
+
     df = pd.DataFrame(columns=['Date',
                                'Unix',
                                'Ticker',
@@ -76,7 +78,6 @@ def forward(gather=["Total Debt/Equity",
                                'SP500',
                                'sp500_p_change',
                                'Difference',
-                               ##############
                                'DE Ratio',
                                'Trailing P/E',
                                'Price/Sales',
@@ -112,17 +113,18 @@ def forward(gather=["Total Debt/Equity",
                                'Short Ratio',
                                'Short % of Float',
                                'Shares Short (prior ',
-                               ##############
                                'Status'])
 
     file_list = os.listdir("forward")
 
+    # Thank you macOS for these .DS_Store files.
     if '.DS_Store' in file_list:
         idx = file_list.index('.DS_Store')
         del file_list[idx]
 
     print(file_list)
 
+    # Parsing the current data from Yahoo. Once the UI for yahoo changes, this is not going to work.
     for each_file in file_list[0:]:
         ticker = each_file.split(".html")[0]  # retrieves the stock symbol
         full_file_path = "forward/" + each_file
@@ -160,7 +162,6 @@ def forward(gather=["Total Debt/Equity",
                                 'sp500_p_change': "N/A",
                                 'Difference': "N/A",
                                 'DE Ratio': value_list[0],
-                                # 'Market Cap': value_list[1],
                                 'Trailing P/E': value_list[1],
                                 'Price/Sales': value_list[2],
                                 'Price/Book': value_list[3],
