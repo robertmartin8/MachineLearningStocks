@@ -4,20 +4,27 @@ import re
 import time
 import urllib.request
 
-# Enter your own path.
+# Enter the file path to the intraQuarter directory
 path = "/Users/User/intraQuarter"
 
 
 def check_yahoo():
+    """
+    Retrieves the stock ticker from intraQuarter, then downloads the html files from yahoo finance
+    :return: Writes all the retrieved data into a new directory named forward/
+    """
+    # Read the tickers
     statspath = path + '/_KeyStats'
     stock_list = [x[0] for x in os.walk(statspath)]
 
+    # Parse yahoo finance based on these tickers
     for each_dir in stock_list[1:]:
         try:
             each_dir = each_dir.split("/Users/User/intraQuarter/_KeyStats/")[1]
             link = "http://sg.finance.yahoo.com/q/ks?s=" + each_dir.upper() + "+Key+Statistics"
             resp = urllib.request.urlopen(link).read()
 
+            # Write results to a new directory
             save = "forward/" + str(each_dir) + ".html"
             store = open(save, "w")
             store.write(str(resp))
@@ -28,12 +35,7 @@ def check_yahoo():
             time.sleep(2)
 
 
-check_yahoo()
-
-
 # This code puts the current data made by check_yahoo() into a dataframe then csv.
-
-
 def forward(gather=["Total Debt/Equity",
                     'Trailing P/E',
                     'Price/Sales',
@@ -69,6 +71,12 @@ def forward(gather=["Total Debt/Equity",
                     'Short Ratio',
                     'Short % of Float',
                     'Shares Short (prior ']):
+    """
+    Creates the forward sample, by reading the current data from yahoo. By right I could combine 
+    this with check_yahoo(), but it is clearer this way. 
+    :param gather: The list of fundamentals which we need to gather. 
+    :return: The forward sample csv. 
+    """
 
     df = pd.DataFrame(columns=['Date',
                                'Unix',
@@ -117,15 +125,16 @@ def forward(gather=["Total Debt/Equity",
 
     file_list = os.listdir("forward")
 
-    # Thank you macOS for these .DS_Store files.
+    # This is a requirement if you are on a mac. Inelegant code just to remove the DS_store.
+    # Thanks Apple!
     if '.DS_Store' in file_list:
-        idx = file_list.index('.DS_Store')
-        del file_list[idx]
+        del file_list[file_list.index('.DS_Store')]
 
     print(file_list)
 
-    # Parsing the current data from Yahoo. Once the UI for yahoo changes, this is not going to work.
-    for each_file in file_list[0:]:
+    # Parsing the current data from the html that we downloaded in check_yahoo().
+    # Once the UI for yahoo changes, the regex will break and this will not work.
+    for each_file in file_list:
         ticker = each_file.split(".html")[0]  # retrieves the stock symbol
         full_file_path = "forward/" + each_file
         source = open(full_file_path, "r").read()
@@ -151,6 +160,7 @@ def forward(gather=["Total Debt/Equity",
                     value_list.append(value)
 
             if value_list.count("N/A") > 0:
+                # This is why our result is 'forward_sample_NO_NA'. Change this if you want NA.
                 pass
             else:
                 df = df.append({'Date': "N/A",
@@ -203,4 +213,6 @@ def forward(gather=["Total Debt/Equity",
         df.to_csv("forward_sample_NO_NA.csv")
 
 
+# Call the functions to produce the csv.
+check_yahoo()
 forward()
