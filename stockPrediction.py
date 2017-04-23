@@ -45,65 +45,54 @@ FEATURES = ['DE Ratio',
 
 
 def status_calc(stock, sp500):
-    difference = stock - sp500
-    if difference > how_much_better:
-        return 1
-    else:
-        return 0
+    return stock - sp500 > how_much_better
 
 
 def build_data_set():
-    data_df = pd.DataFrame.from_csv("key_stats_NO_NA_enhanced.csv")
+    training_data = pd.DataFrame.from_csv("key_stats_NO_NA_enhanced.csv")
 
-    # Randomly reorder the data
-    data_df = data_df.reindex(np.random.permutation(data_df.index))
-    data_df = data_df.replace("NaN", 0).replace("N/A", 0)
+    # Randomly reorder the data, and replace NA.
+    training_data = training_data.reindex(np.random.permutation(training_data.index))
+    training_data = training_data.replace("NaN", 0).replace("N/A", 0)
 
     # Write out whether a stock has outperformed or not
-    data_df["Status2"] = list(map(status_calc, data_df["stock_p_change"], data_df["sp500_p_change"]))
+    training_data["Status2"] = list(map(status_calc, training_data["stock_p_change"], training_data["sp500_p_change"]))
 
-    # Scale so that outliers don't skew the predictions
-    X = np.array(data_df[FEATURES].values)
-    X = preprocessing.scale(X)
+    # Feature scaling
+    X_train = preprocessing.scale(np.array(training_data[FEATURES].values))
 
-    y = data_df["Status2"] \
+    y_train = training_data["Status2"] \
         .replace("underperform", 0) \
         .replace("outperform", 1) \
         .values.tolist()
 
-    Z = np.array(data_df[["stock_p_change", "sp500_p_change"]])
-
-    return X, y, Z
+    return X_train, y_train
 
 
 def analysis():
-    # Build the data set and fit the SVM model.
-    X, y, Z = build_data_set()
+    # Fit the SVC (exclude the last column).
+    X_train, y_train = build_data_set()
     clf = svm.SVC(kernel="linear", C=1.0)
-    clf.fit(X[:-1], y[:-1])
+    clf.fit(X_train[:-1], y_train[:-1])
 
     # Now we get the actual data from which we want to generate predictions.
-    data_df = pd.DataFrame.from_csv("forward_sample_NO_NA.csv")
-    data_df = data_df.replace("N/A", 0).replace("NaN", 0)
+    data = pd.DataFrame.from_csv("forward_sample_NO_NA.csv")
+    data = data.replace("N/A", 0).replace("NaN", 0)
 
-    X = np.array(data_df[FEATURES].values)
-    X = preprocessing.scale(X)
-
-    Z = data_df["Ticker"].values.tolist()
-
+    X_test = preprocessing.scale(np.array(data[FEATURES].values))
+    Z = data["Ticker"].values.tolist()
     invest_list = []
 
     # If our SVM predicts outperformance, append that stock to an invest_list.
-    for i in range(len(X)):
-        p = clf.predict(X[i])[0]
-        if p == 1:
+    for i in range(len(X_test)):
+        p = clf.predict(X_test[i])[0]
+        if p:
             invest_list.append(Z[i])
 
     return invest_list
 
-
 # Run the analysis multiple times (in this case, eight), and print the results
-# which have turned up multiple times. This code is very inelegant.
+# which have turned up more than 2/3 of the time.  This code is very inelegant.
 
 final_list = []
 loops = 8
@@ -117,6 +106,7 @@ while loops:
 x = Counter(final_list)
 
 print(30 * "_")
-for each in x:
-    if x[each] > loops - (loops / 3):
-        print(each)
+for each_prediction in x:
+    # If the stock was predicted 2/3 of the time, append it.
+    if x[each_prediction] > loops - (loops / 3):
+        print(each_prediction)
