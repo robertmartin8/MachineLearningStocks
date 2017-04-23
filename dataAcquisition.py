@@ -7,7 +7,6 @@ from datetime import datetime
 # How much a stock has to outperform the S&P500 to be considered a success. Subjective.
 how_much_better = 5
 
-
 # Enter the path to intraQuarter
 path = "/Users/User/intraQuarter"
 
@@ -48,9 +47,16 @@ def key_stats(gather=["Total Debt/Equity",
                       'Short Ratio',
                       'Short % of Float',
                       'Shares Short (prior ']):
+    """
+    Looks at the data parsed for us by Sentdex (in intraQuarter) to make a csv of the historical 
+    key statistics. 
+    :param gather: The list of fundamentals which we need to gather.
+    :return: csv of historical key statistics, on which we will train our SVM. 
+    """
 
+    # List of stocks
     statspath = path + '/_KeyStats'
-    stock_list = [x[0] for x in os.walk(statspath)]  # creates list containing directory locations of stock
+    stock_list = [x[0] for x in os.walk(statspath)]
 
     df = pd.DataFrame(columns=['Date',
                                'Unix',
@@ -109,8 +115,7 @@ def key_stats(gather=["Total Debt/Equity",
 
         # snippet to get rid of the stupid .DS_Store file that osx makes.
         if '.DS_Store' in each_file:
-            idx = each_file.index('.DS_Store')
-            del each_file[idx]
+            del each_file[each_file.index('.DS_Store')]
 
         ticker = each_dir.split(statspath)[1]  # retrieves the stock symbol
         ticker_list.append(ticker)
@@ -160,6 +165,7 @@ def key_stats(gather=["Total Debt/Equity",
                         except Exception as e:
                             print("sp500", str(e))
 
+                    # We want to see the stock's performance one year later.
                     one_year_later = int(unix_time + 31536000)
 
                     try:
@@ -168,6 +174,7 @@ def key_stats(gather=["Total Debt/Equity",
                         sp500_1y_value = float(row["Adj Close"])
                     except:
                         try:
+                            # Again, for the case that we query data on a weekend
                             sp500_1y = datetime.fromtimestamp(one_year_later - 259200).strftime('%Y-%m-%d')
                             row = sp500_df[(sp500_df.index == sp500_1y)]
                             sp500_1y_value = float(row["Adj Close"])
@@ -204,15 +211,13 @@ def key_stats(gather=["Total Debt/Equity",
                     stock_p_change = round(((stock_1y_value - stock_price) / stock_price * 100), 2)
                     sp500_p_change = round(((sp500_1y_value - sp500_value) / sp500_value * 100), 2)
 
-                    difference = stock_p_change - sp500_p_change
-
                     # If the stock outperformed the SP500 by 5%, label it 'outperform'.
-                    if difference > how_much_better:
+                    if stock_p_change - sp500_p_change > how_much_better:
                         status = "outperform"
                     else:
                         status = "underperform"
 
-                    # this determines if we have NA or no NA
+                    # This determines if we have NA or no NA
                     if value_list.count("N/A") > 0:
                         pass
                     else:
@@ -223,7 +228,7 @@ def key_stats(gather=["Total Debt/Equity",
                                         'stock_p_change': stock_p_change,
                                         'SP500': sp500_value,
                                         'sp500_p_change': sp500_p_change,
-                                        'Difference': difference,
+                                        'Difference': stock_p_change - sp500_p_change,
                                         'DE Ratio': value_list[0],
                                         # 'Market Cap': value_list[1],
                                         'Trailing P/E': value_list[1],
@@ -262,9 +267,11 @@ def key_stats(gather=["Total Debt/Equity",
                                         'Shares Short (prior ': value_list[34],
                                         'Status': status}, ignore_index=True)
                 except Exception as e:
+                    # This is awful practice from an awful coder.
                     pass
 
     df.to_csv("key_stats_NO_NA_enhanced.csv")
 
 
+# Call the function to produce the csv
 key_stats()
