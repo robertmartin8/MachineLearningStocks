@@ -10,74 +10,75 @@ path = "/Users/User/intraQuarter"
 
 def check_yahoo():
     """
-    Retrieves the stock ticker from intraQuarter, then downloads the html files from yahoo finance
-    :return: Writes all the retrieved data into a new directory named forward/
+    Retrieves the stock ticker from intraQuarter, then downloads the html file from yahoo finance.
+    :return: forward/ filled with the html file for each ticker
     """
-    # Read the tickers
     statspath = path + '/_KeyStats'
     stock_list = [x[0] for x in os.walk(statspath)]
 
     # Parse yahoo finance based on these tickers
     for each_dir in stock_list[1:]:
         try:
-            each_dir = each_dir.split("/Users/User/intraQuarter/_KeyStats/")[1]
-            link = "http://sg.finance.yahoo.com/q/ks?s=" + each_dir.upper() + "+Key+Statistics"
+            # Get the ticker from intraQuarter
+            ticker = each_dir.split("/Users/User/intraQuarter/_KeyStats/")[1]
+            link = "http://sg.finance.yahoo.com/q/ks?s=" + ticker.upper() + "+Key+Statistics"
             resp = urllib.request.urlopen(link).read()
 
-            # Write results to a new directory
+            # Write results to forward/
             save = "forward/" + str(each_dir) + ".html"
-            store = open(save, "w")
-            store.write(str(resp))
-            store.close()
+            file = open(save, "w")
+            file.write(str(resp))
+            file.close()
 
         except Exception as e:
             print(str(e))
             time.sleep(2)
 
 
-# This code puts the current data made by check_yahoo() into a dataframe then csv.
-def forward(gather=["Total Debt/Equity",
-                    'Trailing P/E',
-                    'Price/Sales',
-                    'Price/Book',
-                    'Profit Margin',
-                    'Operating Margin',
-                    'Return on Assets',
-                    'Return on Equity',
-                    'Revenue Per Share',
-                    'Market Cap',
-                    'Enterprise Value',
-                    'Forward P/E',
-                    'PEG Ratio',
-                    'Enterprise Value/Revenue',
-                    'Enterprise Value/EBITDA',
-                    'Revenue',
-                    'Gross Profit',
-                    'EBITDA',
-                    'Net Income Avl to Common ',
-                    'Diluted EPS',
-                    'Earnings Growth',
-                    'Revenue Growth',
-                    'Total Cash',
-                    'Total Cash Per Share',
-                    'Total Debt',
-                    'Current Ratio',
-                    'Book Value Per Share',
-                    'Cash Flow',
-                    'Beta',
-                    'Held by Insiders',
-                    'Held by Institutions',
-                    'Shares Short (as of',
-                    'Short Ratio',
-                    'Short % of Float',
-                    'Shares Short (prior ']):
+def forward():
     """
-    Creates the forward sample, by reading the current data from yahoo. By right I could combine 
-    this with check_yahoo(), but it is clearer this way. 
-    :param gather: The list of fundamentals which we need to gather. 
-    :return: The forward sample csv. 
+    Creates the forward sample, by parsing the html that we downloaded in check_yahoo(). 
+    Reads this data into a dataframe, then converts to a csv. 
+    :return: the forward sample as a csv. 
     """
+    # The parameters which we will search for
+    gather = ["Total Debt/Equity",
+              'Trailing P/E',
+              'Price/Sales',
+              'Price/Book',
+              'Profit Margin',
+              'Operating Margin',
+              'Return on Assets',
+              'Return on Equity',
+              'Revenue Per Share',
+              'Market Cap',
+              'Enterprise Value',
+              'Forward P/E',
+              'PEG Ratio',
+              'Enterprise Value/Revenue',
+              'Enterprise Value/EBITDA',
+              'Revenue',
+              'Gross Profit',
+              'EBITDA',
+              'Net Income Avi to Common',
+              'Diluted EPS',
+              'Earnings Growth',
+              'Revenue Growth',
+              'Total Cash',
+              'Total Cash Per Share',
+              'Total Debt',
+              'Current Ratio',
+              'Book Value Per Share',
+              'Cash Flow',
+              'Beta',
+              'Held by Insiders',
+              'Held by Institutions',
+              'Shares Short',
+              'Short Ratio',
+              'Short % of Float',
+              'Shares Short (prior ']
 
+    # The empty dataframe which we will fill
     df = pd.DataFrame(columns=['Date',
                                'Unix',
                                'Ticker',
@@ -130,12 +131,9 @@ def forward(gather=["Total Debt/Equity",
     if '.DS_Store' in file_list:
         del file_list[file_list.index('.DS_Store')]
 
-    print(file_list)
-
-    # Parsing the current data from the html that we downloaded in check_yahoo().
-    # Once the UI for yahoo changes, the regex will break and this will not work.
+    # This is the actual parsing. This needs to be fixed every time yahoo changes their UI.
     for each_file in file_list:
-        ticker = each_file.split(".html")[0]  # retrieves the stock symbol
+        ticker = each_file.split(".html")[0]
         full_file_path = "forward/" + each_file
         source = open(full_file_path, "r").read()
 
@@ -161,8 +159,13 @@ def forward(gather=["Total Debt/Equity",
 
             if value_list.count("N/A") > 0:
                 # This is why our result is 'forward_sample_NO_NA'. Change this if you want NA.
+                # But of course, in that case you need to deal with the NA later on.
                 pass
+
             else:
+                print(each_file)
+
+                # I know this is ugly, but it's practical.
                 df = df.append({'Date': "N/A",
                                 'Unix': "N/A",
                                 'Ticker': ticker,
@@ -207,6 +210,7 @@ def forward(gather=["Total Debt/Equity",
                                 'Short % of Float': value_list[33],
                                 'Shares Short (prior ': value_list[34],
                                 'Status': "N/A"}, ignore_index=True)
+
         except Exception:
             pass
 
