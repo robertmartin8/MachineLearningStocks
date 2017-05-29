@@ -13,22 +13,24 @@ def check_yahoo():
     Retrieves the stock ticker from intraQuarter, then downloads the html file from yahoo finance.
     :return: forward/ filled with the html file for each ticker
     """
-    statspath = path + '/_KeyStats'
+    statspath = path + '/_KeyStats/'
     stock_list = [x[0] for x in os.walk(statspath)]
 
     # Parse yahoo finance based on these tickers
     for each_dir in stock_list[1:]:
         try:
             # Get the ticker from intraQuarter
-            ticker = each_dir.split("/Users/User/intraQuarter/_KeyStats/")[1]
-            link = "http://sg.finance.yahoo.com/q/ks?s=" + ticker.upper() + "+Key+Statistics"
+            ticker = each_dir.split(statspath)[1]
+            link = "http://finance.yahoo.com/quote/" + ticker.upper() + "/key-statistics"
             resp = urllib.request.urlopen(link).read()
 
             # Write results to forward/
-            save = "forward/" + str(each_dir) + ".html"
+            save = "forward/" + str(ticker) + ".html"
             file = open(save, "w")
             file.write(str(resp))
             file.close()
+
+            print(save)
 
         except Exception as e:
             print(str(e))
