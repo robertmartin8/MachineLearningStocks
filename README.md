@@ -35,7 +35,7 @@ For the historical stock prices, I used [Quandl](https://www.quandl.com/), which
 
 Quandl has nicely cleaned data, but more importantly its stock data has been adjusted to include things like share splits.
 
-Quandl has the historical S&P500 values [ready to download in a csv](https://www.quandl.com/data/YAHOO/INDEX_GSPC-S-P-500-Index), which we name `YAHOO-INDEX_GSPC.csv`.
+The historical S&P500 values can be downloaded from [yahoo finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC), which we name `YAHOO-INDEX_GSPC.csv`.
 
 ###  Current data
 

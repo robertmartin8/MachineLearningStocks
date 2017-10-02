@@ -5,7 +5,7 @@ from collections import Counter
 
 # How much a stock has to outperform the S&P500 to be considered a success.
 # Increase this value if you want fewer, but supposedly higher quality, predictions.
-how_much_better = 10
+how_much_better = 15
 
 FEATURES = ['DE Ratio',
             'Trailing P/E',
@@ -72,7 +72,7 @@ def build_data_set():
 def analysis():
     # Fit the SVC (exclude the last column).
     X_train, y_train = build_data_set()
-    clf = svm.SVC(kernel="linear", C=1.0)
+    clf = svm.SVC(kernel="rbf", C=8, gamma=0.3)
     clf.fit(X_train[:-1], y_train[:-1])
 
     # Now we get the actual data from which we want to generate predictions.
