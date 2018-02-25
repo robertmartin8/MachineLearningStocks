@@ -5,6 +5,16 @@ This project uses python and scikit-learn to make stock predictions. The code is
 
 This was my first proper python project, as well as the first time I've used GitHub, so apologies for poor documentation and bad coding.
 
+**Update as of February 2017:** Because a fair amount of people have expressed interest in this project, over the
+next few weeks I am going to fix all the oustanding issues and modernise the project. 
+
+**Update as of October 2017:** Basically, my coding ability has come a long way since I first wrote this project, as has my understanding of machine learning. 
+I have continuously been developing a second iteration of this project, which is FAR more robust and sophisticated (though the general idea remains the same).
+ I have better data, better machine learning algorithms, and correspondingly better performance. 
+ At some stage, I may update this project on github, but I hope you understand my reluctance to give away alpha. 
+ That being said, I suggest you use this project as a starting point: from experience,
+  I can tell you that on this backbone you can probably build a profitable trading strategy. 
+
 ## Overview
 
 The program looks at historical stock fundamentals (e.g PE ratio, Debt/equity etc), and also historical prices. The program then tries to 'learn' if there is any relationship between those fundamentals and the resulting change in price.
@@ -25,7 +35,7 @@ We need three datasets:
 
 ### Historical stock fundamentals
 
-This is actually very difficult to find. However, it turns out that there is a way to parse it from yahoo finance. I do not know how to do this. Fortunately, [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On this page you will be able to find a file called `intraQuarter.zip`.
+This is actually very difficult to find. However, it turns out that there is a way to parse it from yahoo finance. I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On this page you will be able to find a file called `intraQuarter.zip`.
 
 intraQuarter contains a subfolder called KeyStats, which contains fundamentals for all stocks in the S&P500 back to around 2003, sorted by stock.
 
@@ -39,7 +49,7 @@ The historical S&P500 values can be downloaded from [yahoo finance](https://fina
 
 ###  Current data
 
-Current data is parsed from Yahoo finance. The original code did the parsing using regex, but since the code was written Yahoo massively changed their UI. As such, we actually parse the data from Yahoo Finance Singapore, which still uses the old UI. Once this UI is changed, the program will no longer work.
+Current data is parsed from Yahoo finance using regex. I tend to have to fix this whenever yahoo changes their UI :(
 
 
 ## What each file does
@@ -47,6 +57,10 @@ Current data is parsed from Yahoo finance. The original code did the parsing usi
 ### quandlData.py
 
 Uses the quandl API to get historic adjusted stock prices, returning `stock_prices.csv`.
+
+**update as of september 2017:** I suspect this is broken, because quandl changed their UI.
+However, one can simply use this module 
+ 
 
 ### dataAcquisition.py
 
@@ -63,7 +77,7 @@ Parses the current stock fundamentals from sg.finance.yahoo, and puts them into 
 
 ### stockPrediction.py
 
-The machine learning. Uses a SVM to fit the data, then predicts the outcome. Returns a list of stocks to invest in.
+The machine learning. Uses a linear SVM to fit the data, then predicts the outcome. Returns a list of stocks to invest in.
 
 ## Dependencies
 
