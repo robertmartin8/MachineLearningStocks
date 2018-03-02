@@ -1,37 +1,48 @@
 # MachineLearningStocks
 
-This project uses python and scikit-learn to make stock predictions based on fundamental dat. It was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), though I think it is fair to say that it has since evolved into a different beast.
+This project uses python and scikit-learn to make stock predictions. Concretely, we will try to learn the relationship between stock fundamentals (e.g PE ratio, debt/equity, float, etc) and the subsequent annual price change (compared with the index growth), based on a historical dataset of stock fundamentals and stock prices.
 
-This project represents a skeletal example of using machine learning to make stock predictions. While I would not live trade based off of the predictions from this exact code, I do think that this can make a good starting point. I have actually used code based on this project to live trade, with pretty decent results.
+This repository represents a skeletal example of using machine learning to make stock predictions. I have tried to design it so that it is highly extensible and experimentable – I encourage you to make as many modifications as you see fit. While I would not live trade based off of the predictions from this exact code, I do believe that it can be a starting point for a profitable trading system – I have actually used code based on this project to live trade, with pretty decent results.
 
-This project has quite a lot of personal significance for me, as it was my first proper python project, as well as the first time I used git. It was rife with bad practice and inefficiencies: I have since tried to amend most of this, but please be warned that some issues may remain (feel free to raise an issue, or fork and submit a PR).
+Though this project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), it has quite a lot of personal significance for me. It was my first proper python project, one of my first real encounters with ML, and the first time I used git. At the start, my code was rife with bad practice and inefficiencies: I have since tried to amend most of this, but please be warned that some issues may remain (feel free to raise an issue, or fork and submit a PR). Both the project and I myself have evolved a lot since the first iteration, and despite its origins in a youtube tutorial series I now like to think of this project as 'my own'.
 
-# Contents
+*As a disclaimer, this is a purely educational project. Be aware that backtested performance may often be deceptive – trade at your own risk!*
 
+## Contents
+
+- [Overview](#overview)
+- [Acquiring data](#acquiring-data)
+  - [Historical stock fundamentals](#historical-stock-fundamentals)
+  - [Historical stock price changes](#historical-stock-price-changes)
+  - [Current fundamental data](#current-fundamental-data)
+- [What each file does](#what-each-file-does)
+  - [quandlData.py](#quandldatapy)
+  - [dataAcquisition.py](#dataacquisitionpy)
+  - [currentData.py](#currentdatapy)
+  - [stockPrediction.py](#stockpredictionpy)
+- [Dependencies](#dependencies)
+- [Where to go from here](#where-to-go-from-here)
+  - [Data acquisition](#data-acquisition)
+  - [Data preprocessing](#data-preprocessing)
 
 ## Overview
 
 The overall workflow to use machine learning to make stocks prediction is as follows:
 
 1. Acquire historical fundamental data -- these are the *features* or *predictors*
-2. Acquire historical pricing data -- ultimately, we are trying to predict price changes. Thus we need historical pricing data.
-3. Preprocess data
-4. Use a machine learning model to learn from your data
-5. Backtest the performance of the machine learning model
-6. Acquire current fundamental data
-7. Generate predictions 
+2. Acquire historical stock price data -- this will make up the *dependent variable*
+3. Acquire historical index data (in this case, S&P500) -- a 5% stock growth does not mean much if the S&P500 grew 10% in that time period, so we will be comparing all returns to those of the index.
+4. Preprocess data
+5. Use a machine learning model to learn from your data
+6. Backtest the performance of the machine learning model
+7. Acquire current fundamental data
+8. Generate predictions from current fundamental data
 
+This is a very generalised overview, but in principle this is all you need to build a fundamentals-based ML stock predictor.
 
+## Acquiring data
 
-The program looks at historical stock fundamentals (e.g PE ratio, Debt/equity etc), and also historical prices. The program then tries to 'learn' if there is any relationship between those fundamentals and the resulting change in price.
-
-Then, we feed in the current stock fundamentals. The program should then output a list of stocks which have 'good fundamentals', which in the past have corresponded to a price increase.
-
-Note that this repository *does not include* all the backtesting etc. It is just the final product. During the backtesting, I was getting returns of about 17%, which is quite a decent outperformance of the market.
-
-All stocks are US based, from the S&P500. This also behaves as our benchmark.
-
-## Data sources
+It turns out that data acquisition and processing is probably the hardest part of this project. But it is a prerequisite for any machine learning, so it's best to not fret and just carry on.
 
 We need three datasets:
 
@@ -41,32 +52,83 @@ We need three datasets:
 
 ### Historical stock fundamentals
 
-This is actually very difficult to find. However, it turns out that there is a way to parse it from yahoo finance. I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On this page you will be able to find a file called `intraQuarter.zip`.
+Historical fundamental data is actually very difficult to find (for free, at least). Although sites like [Quandl](https://www.quandl.com/) do have datasets available, you often have to pay a pretty steep fee.
 
-intraQuarter contains a subfolder called KeyStats, which contains fundamentals for all stocks in the S&P500 back to around 2003, sorted by stock.
+It turns out that there is a way to parse this data, for free, from [Yahoo finance](https://finance.yahoo.com/). I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On his page you will be able to find a file called `intraQuarter.zip`. Relevant to this project is the subfolder called `_KeyStats`, which contains html files that hold stock fundamentals for all stocks in the S&P500 back to around 2003, sorted by stock. However, at this stage, this data is unusable -- we have to parse it into a nice csv file.
 
-### Historical stock price changes
+### Historical stock price data
 
-For the historical stock prices, I used [Quandl](https://www.quandl.com/), which has a free python API.
+In the first iteration of the project, I used `pandas-datareader`, an extremely convenient library which can load stock data straight into pandas. However, after Yahoo Finance changed their UI, `datareader` no longer worked, so I switched to [Quandl](https://www.quandl.com/), which has a free python API (and free stock price data for a number of stocks).
 
-Quandl has nicely cleaned data, but more importantly its stock data has been adjusted to include things like share splits.
+However, as `pandas-datareader` has been [fixed](https://github.com/ranaroussi/fix-yahoo-finance), we will use it.
 
-The historical S&P500 values can be downloaded from [yahoo finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC), which we name `YAHOO-INDEX_GSPC.csv`.
+Historical S&P500 prices can be downloaded from [yahoo finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC). We will name this `YAHOO-INDEX_GSPC.csv`.
 
-###  Current data
+### Current fundamental data
 
-Current data is parsed from Yahoo finance using regex. I tend to have to fix this whenever yahoo changes their UI :(
+Current data is scraped from Yahoo finance: at this stage, we literally just download the statistics page for each stock (here is the [page](https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL) for Apple).
 
+## Preprocessing
+
+### Features
+
+#### Valuation measures
+
+- 'Market Cap'
+- Enterprise Value
+- Trailing P/E
+- Forward P/E
+- PEG Ratio
+- Price/Sales
+- Price/Book
+- Enterprise Value/Revenue
+- Enterprise Value/EBITDA
+
+#### Financials
+
+- Profit Margin
+- Operating Margin
+- Return on Assets
+- Return on Equity
+- Revenue
+- Revenue Per Share
+- Quarterly Revenue Growth
+- Gross Profit
+- EBITDA
+- Net Income Avi to Common
+- Diluted EPS
+- Quarterly Earnings Growth
+- Total Cash
+- Total Cash Per Share
+- Total Debt
+- Total Debt/Equity
+- Current Ratio
+- Book Value Per Share
+- Operating Cash Flow
+- Levered Free Cash Flow
+
+#### Trading information
+
+- Beta
+- 50-Day Moving Average
+- 200-Day Moving Average
+- Avg Vol (3 month)
+- Shares Outstanding
+- Float
+- % Held by Insiders
+- % Held by Institutions
+- Shares Short
+- Short Ratio
+- Short % of Float
+- Shares Short (prior month)
+
+### Current data
+
+Current data is parsed from Yahoo finance using regex. In general, it is [really not recommended](https://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags) to use regex to parse HTML. However, I think regex probably wins out for ease of understanding (this project being educational in nature), and from my experience regex works fine for this specific example.
+
+I tend to have to fix this whenever yahoo changes their UI :(
 
 ## What each file does
-
-### quandlData.py
-
-Uses the quandl API to get historic adjusted stock prices, returning `stock_prices.csv`.
-
-**update as of september 2017:** I suspect this is broken, because quandl changed their UI.
-However, one can simply use this module 
- 
 
 ### dataAcquisition.py
 
@@ -87,17 +149,22 @@ The machine learning. Uses a linear SVM to fit the data, then predicts the outco
 
 ## Dependencies
 
-Being lazy, I have copied all the unique import statements.
+## Where to go from here
 
-```python
-import numpy as np
-from sklearn import svm, preprocessing
-import pandas as pd
-from collections import Counter
-import os
-import re
-import time
-import urllib.request
-from datetime import datetime
-from Quandl import Quandl
-```
+I have stated that this project is extensible, so here are some ideas to get you started (and increase returns)
+
+### Data acquisition
+
+My personal belief is that better quality data is THE factor that will determine your ultimate performance. Here are some ideas:
+
+- Explore the other subfolders in Sentdex's `intraQuarter.zip`.
+- Buy fundamental data from Quandl
+- Parse the annual reports that all companies submit to the SEC (have a look at the [Edgar Database](https://www.sec.gov/edgar/searchedgar/companysearch.html))
+- Try to find websites from which to scrape fundamental data (this has been my solution).
+- Ditch US stocks and go global -- perhaps better results may be found in markets that are less-liquid. It'd be interesting to see whether the predictive power of features vary based on geography. 
+
+### Data preprocessing
+
+- Build a more robust parser using BeautifulSoup
+
+### Machine learning
