@@ -1,21 +1,27 @@
 # MachineLearningStocks
 
-This project uses python and scikit-learn to make stock predictions. The code is based on Sentdex's excellent
-[machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3).
+This project uses python and scikit-learn to make stock predictions based on fundamental dat. It was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), though I think it is fair to say that it has since evolved into a different beast.
 
-This was my first proper python project, as well as the first time I've used GitHub, so apologies for poor documentation and bad coding.
+This project represents a skeletal example of using machine learning to make stock predictions. While I would not live trade based off of the predictions from this exact code, I do think that this can make a good starting point. I have actually used code based on this project to live trade, with pretty decent results.
 
-**Update as of February 2017:** Because a fair amount of people have expressed interest in this project, over the
-next few weeks I am going to fix all the oustanding issues and modernise the project. 
+This project has quite a lot of personal significance for me, as it was my first proper python project, as well as the first time I used git. It was rife with bad practice and inefficiencies: I have since tried to amend most of this, but please be warned that some issues may remain (feel free to raise an issue, or fork and submit a PR).
 
-**Update as of October 2017:** Basically, my coding ability has come a long way since I first wrote this project, as has my understanding of machine learning. 
-I have continuously been developing a second iteration of this project, which is FAR more robust and sophisticated (though the general idea remains the same).
- I have better data, better machine learning algorithms, and correspondingly better performance. 
- At some stage, I may update this project on github, but I hope you understand my reluctance to give away alpha. 
- That being said, I suggest you use this project as a starting point: from experience,
-  I can tell you that on this backbone you can probably build a profitable trading strategy. 
+# Contents
+
 
 ## Overview
+
+The overall workflow to use machine learning to make stocks prediction is as follows:
+
+1. Acquire historical fundamental data -- these are the *features* or *predictors*
+2. Acquire historical pricing data -- ultimately, we are trying to predict price changes. Thus we need historical pricing data.
+3. Preprocess data
+4. Use a machine learning model to learn from your data
+5. Backtest the performance of the machine learning model
+6. Acquire current fundamental data
+7. Generate predictions 
+
+
 
 The program looks at historical stock fundamentals (e.g PE ratio, Debt/equity etc), and also historical prices. The program then tries to 'learn' if there is any relationship between those fundamentals and the resulting change in price.
 
