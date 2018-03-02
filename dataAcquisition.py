@@ -48,10 +48,10 @@ def key_stats(gather=["Total Debt/Equity",
                       'Short % of Float',
                       'Shares Short (prior ']):
     """
-    Looks at the data parsed for us by Sentdex (in intraQuarter) to make a csv of the historical 
-    key statistics. 
+    Looks at the data parsed for us by Sentdex (in intraQuarter) to make a csv of the historical
+    key statistics.
     :param gather: The list of fundamentals which we need to gather.
-    :return: csv of historical key statistics, on which we will train our SVM. 
+    :return: csv of historical key statistics, on which we will train our SVM.
     """
 
     # List of stocks
@@ -136,12 +136,14 @@ def key_stats(gather=["Total Debt/Equity",
                     for each_data in gather:
                         try:
                             # Use a regex to find the value associated with the variable of interest.
-                            regex = re.escape(each_data) + r'.*?(\d{1,8}\.\d{1,8}M?B?|N/A)%?</td>'
+                            regex = re.escape(
+                                each_data) + r'.*?(\d{1,8}\.\d{1,8}M?B?|N/A)%?</td>'
                             value = re.search(regex, source)
                             value = (value.group(1))
 
                             if "B" in value:
-                                value = float(value.replace("B", '')) * 1000000000
+                                value = float(value.replace(
+                                    "B", '')) * 1000000000
                             elif "M" in value:
                                 value = float(value.replace("M", '')) * 1000000
 
@@ -152,14 +154,16 @@ def key_stats(gather=["Total Debt/Equity",
                             value_list.append(value)
 
                     try:
-                        sp500_date = datetime.fromtimestamp(unix_time).strftime('%Y-%m-%d')
+                        sp500_date = datetime.fromtimestamp(
+                            unix_time).strftime('%Y-%m-%d')
                         row = sp500_df[(sp500_df.index == sp500_date)]
                         sp500_value = float(row["Adj Close"])
                     except:
                         # this except statement is in case we end up looking for data on a weekend,
                         # if this is the case, we subtract three days
                         try:
-                            sp500_date = datetime.fromtimestamp(unix_time - 259200).strftime('%Y-%m-%d')
+                            sp500_date = datetime.fromtimestamp(
+                                unix_time - 259200).strftime('%Y-%m-%d')
                             row = sp500_df[(sp500_df.index == sp500_date)]
                             sp500_value = float(row["Adj Close"])
                         except Exception as e:
@@ -169,47 +173,59 @@ def key_stats(gather=["Total Debt/Equity",
                     one_year_later = int(unix_time + 31536000)
 
                     try:
-                        sp500_1y = datetime.fromtimestamp(one_year_later).strftime('%Y-%m-%d')
+                        sp500_1y = datetime.fromtimestamp(
+                            one_year_later).strftime('%Y-%m-%d')
                         row = sp500_df[(sp500_df.index == sp500_1y)]
                         sp500_1y_value = float(row["Adj Close"])
                     except:
                         try:
                             # Again, for the case that we query data on a weekend
-                            sp500_1y = datetime.fromtimestamp(one_year_later - 259200).strftime('%Y-%m-%d')
+                            sp500_1y = datetime.fromtimestamp(
+                                one_year_later - 259200).strftime('%Y-%m-%d')
                             row = sp500_df[(sp500_df.index == sp500_1y)]
                             sp500_1y_value = float(row["Adj Close"])
                         except Exception as e:
                             print("sp500 1 year later issue", str(e))
 
                     try:
-                        stock_price_1y = datetime.fromtimestamp(one_year_later).strftime('%Y-%m-%d')
-                        row = stock_df[(stock_df.index == stock_price_1y)][ticker.upper()]
+                        stock_price_1y = datetime.fromtimestamp(
+                            one_year_later).strftime('%Y-%m-%d')
+                        row = stock_df[(stock_df.index ==
+                                        stock_price_1y)][ticker.upper()]
 
                         stock_1y_value = round(float(row), 2)
 
                     except Exception as e:
                         try:
-                            stock_price_1y = datetime.fromtimestamp(one_year_later - 259200).strftime('%Y-%m-%d')
-                            row = stock_df[(stock_df.index == stock_price_1y)][ticker.upper()]
+                            stock_price_1y = datetime.fromtimestamp(
+                                one_year_later - 259200).strftime('%Y-%m-%d')
+                            row = stock_df[(stock_df.index ==
+                                            stock_price_1y)][ticker.upper()]
                             stock_1y_value = round(float(row), 2)
                         except Exception as e:
                             print("stock price:", str(e))
 
                     try:
-                        stock_price = datetime.fromtimestamp(unix_time).strftime('%Y-%m-%d')
-                        row = stock_df[(stock_df.index == stock_price)][ticker.upper()]
+                        stock_price = datetime.fromtimestamp(
+                            unix_time).strftime('%Y-%m-%d')
+                        row = stock_df[(stock_df.index ==
+                                        stock_price)][ticker.upper()]
                         stock_price = round(float(row), 2)
 
                     except Exception as e:
                         try:
-                            stock_price = datetime.fromtimestamp(unix_time - 259200).strftime('%Y-%m-%d')
-                            row = stock_df[(stock_df.index == stock_price)][ticker.upper()]
+                            stock_price = datetime.fromtimestamp(
+                                unix_time - 259200).strftime('%Y-%m-%d')
+                            row = stock_df[(stock_df.index ==
+                                            stock_price)][ticker.upper()]
                             stock_price = round(float(row), 2)
                         except Exception as e:
                             print("stock price:", str(e))
 
-                    stock_p_change = round(((stock_1y_value - stock_price) / stock_price * 100), 2)
-                    sp500_p_change = round(((sp500_1y_value - sp500_value) / sp500_value * 100), 2)
+                    stock_p_change = round(
+                        ((stock_1y_value - stock_price) / stock_price * 100), 2)
+                    sp500_p_change = round(
+                        ((sp500_1y_value - sp500_value) / sp500_value * 100), 2)
 
                     # If the stock outperformed the SP500 by 5%, label it 'outperform'.
                     if stock_p_change - sp500_p_change > how_much_better:
