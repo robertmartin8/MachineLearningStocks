@@ -40,21 +40,21 @@ The overall workflow to use machine learning to make stocks prediction is as fol
 
 This is a very generalised overview, but in principle this is all you need to build a fundamentals-based ML stock predictor.
 
-## Acquiring data
+## Historical data
 
 It turns out that data acquisition and processing is probably the hardest part of this project. But it is a prerequisite for any machine learning, so it's best to not fret and just carry on.
 
-We need three datasets:
+At this stage, we need three datasets:
 
 1. Historical stock fundamentals
-2. Historical stock price changes (including data for the S&P500).
-3. Current stock prices.
+2. Historical stock prices
+3. Historical S&P500 prices
 
 ### Historical stock fundamentals
 
 Historical fundamental data is actually very difficult to find (for free, at least). Although sites like [Quandl](https://www.quandl.com/) do have datasets available, you often have to pay a pretty steep fee.
 
-It turns out that there is a way to parse this data, for free, from [Yahoo finance](https://finance.yahoo.com/). I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On his page you will be able to find a file called `intraQuarter.zip`. Relevant to this project is the subfolder called `_KeyStats`, which contains html files that hold stock fundamentals for all stocks in the S&P500 back to around 2003, sorted by stock. However, at this stage, this data is unusable -- we have to parse it into a nice csv file.
+It turns out that there is a way to parse this data, for free, from [Yahoo finance](https://finance.yahoo.com/). I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On his page you will be able to find a file called `intraQuarter.zip`. Relevant to this project is the subfolder called `_KeyStats`, which contains html files that hold stock fundamentals for all stocks in the S&P500 back to around 2003, sorted by stock. However, at this stage, the data is unusable -- we have to parse it into a nice csv file.
 
 ### Historical stock price data
 
@@ -62,11 +62,11 @@ In the first iteration of the project, I used `pandas-datareader`, an extremely 
 
 However, as `pandas-datareader` has been [fixed](https://github.com/ranaroussi/fix-yahoo-finance), we will use it.
 
-Historical S&P500 prices can be downloaded from [yahoo finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC). We will name this `YAHOO-INDEX_GSPC.csv`.
+### Historical S&P500 prices
 
-### Current fundamental data
+Likewise, we can easily use `pandas-datareader` to access data for the SPY ticker.
 
-Current data is scraped from Yahoo finance: at this stage, we literally just download the statistics page for each stock (here is the [page](https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL) for Apple).
+Failing that, one could manually download it from [yahoo finance](https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC) and place it into the project directory.
 
 ## Preprocessing
 
@@ -122,22 +122,27 @@ Current data is scraped from Yahoo finance: at this stage, we literally just dow
 - Short % of Float
 - Shares Short (prior month)
 
-### Current data
+### Current fundamental data
 
-Current data is parsed from Yahoo finance using regex. In general, it is [really not recommended](https://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags) to use regex to parse HTML. However, I think regex probably wins out for ease of understanding (this project being educational in nature), and from my experience regex works fine for this specific example.
+Current data is scraped from Yahoo finance: we literally just download the statistics page for each stock (here is the [page](https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL) for Apple).
 
-I tend to have to fix this whenever yahoo changes their UI :(
+Then, we parse it using regex. In general, it is [really not recommended](https://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags) to use regex to parse HTML. However, I think regex probably wins out for ease of understanding (this project being educational in nature), and from my experience regex works fine for this specific example.
+
+This part of the projet has to be fixed whenever yahoo finance changes their UI.
 
 ## What each file does
 
-### dataAcquisition.py
+### download_historical_prices.py
+
+Uses `pandas-datareader` with the Yahoo Finance fix to download historical stock price and S&P500 price data.
+
+### parse_keystats.py
 
 This is the bulk of the project. It looks through intraQuarter to parse the historical fundamental data into a pandas dataframe. Then, it adds to this dataframe the stock percentage change in a year. We compare this with the change in the S&P500 in the same year, to determine if the stock underperformed or outperformed.
 
 Requires intraQuarter, `stock_prices.csv`, and `YAHOO-INDEX_GSPC.csv`.
 
 Outputs a csv called `key_stats_NO_NA_enhanced.csv`.
-
 
 ### currentData.py
 
@@ -149,6 +154,8 @@ The machine learning. Uses a linear SVM to fit the data, then predicts the outco
 
 ## Dependencies
 
+- pandas
+
 ## Where to go from here
 
 I have stated that this project is extensible, so here are some ideas to get you started (and increase returns)
@@ -158,13 +165,17 @@ I have stated that this project is extensible, so here are some ideas to get you
 My personal belief is that better quality data is THE factor that will determine your ultimate performance. Here are some ideas:
 
 - Explore the other subfolders in Sentdex's `intraQuarter.zip`.
-- Buy fundamental data from Quandl
 - Parse the annual reports that all companies submit to the SEC (have a look at the [Edgar Database](https://www.sec.gov/edgar/searchedgar/companysearch.html))
 - Try to find websites from which to scrape fundamental data (this has been my solution).
-- Ditch US stocks and go global -- perhaps better results may be found in markets that are less-liquid. It'd be interesting to see whether the predictive power of features vary based on geography. 
+- Ditch US stocks and go global -- perhaps better results may be found in markets that are less-liquid. It'd be interesting to see whether the predictive power of features vary based on geography.
+- Buy Quandl data, or experiment with alternative data.
 
 ### Data preprocessing
 
 - Build a more robust parser using BeautifulSoup
+- In this project, I have just ignored any rows with missing data, but this reduces the size of the dataset considerably. Are there any ways you can fill in some of this data?
+  - hint: if the PE ratio is missing but you know the stock price and the earnings/share...
+  - hint 2: how different is Apple's book value in March to its book value in June?
+- Some form of feature engineering: e.g, calculate [Graham's number ](https://www.investopedia.com/terms/g/graham-number.asp) and use it as a feature!
 
 ### Machine learning
