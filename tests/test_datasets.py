@@ -2,14 +2,11 @@ import pytest
 import os
 import pandas as pd
 
+import parsing_keystats
+import stock_prediction
+import download_historical_prices
 import current_data
 import utils
-
-
-def test_statspath():
-    # Check that the statspath exists and is a directory
-    assert os.path.exists(current_data.statspath)
-    assert os.path.isdir(current_data.statspath)
 
 
 def test_forward_sample_dimensions():
@@ -50,31 +47,13 @@ def test_forward_sample_data():
     assert all(df[fractional_features] <= 100)
 
 
-def test_data_string_to_float():
+@pytest.mark.xfail()
+def test_stock_prediction_dataset():
     """
-    This is a function that needs to meet lots of empirical requirements depending on the
-    imperfections of Yahoo Finance's HTML. The main things are parsing negatives and
-    abbreviations of big numbers.
+    This tests that the dataset on which we are training our algorithm has been correctly built
     """
-
-    assert utils.data_string_to_float("asdfNaN") == "N/A"
-    assert utils.data_string_to_float(">N/A\n</") == "N/A"
-    assert utils.data_string_to_float(">0") == 0
-    assert utils.data_string_to_float("-3") == -3
-    assert utils.data_string_to_float("4K") == 4000
-    assert utils.data_string_to_float("2M") == 3000000
-    assert utils.data_string_to_float("0.07B") == 70000000
-    assert utils.data_string_to_float("-100.1K") == -100100
-    assert utils.data_string_to_float("-0.1M") == -100000
-    assert utils.data_string_to_float("-0.02B") == -20000000
-    assert utils.data_string_to_float("-0.00") == 0
-    assert utils.data_string_to_float("0.00") == 0
-    assert utils.data_string_to_float("0M") == 0
-    assert utils.data_string_to_float("010K") == 10000
-
-    with pytest.raises(ValueError):
-        utils.data_string_to_float(">0x")
-    with pytest.raises(ValueError):
-        utils.data_string_to_float("10k")
-    with pytest.raises(ValueError):
-        utils.data_string_to_float("2KB")
+    df = pd.read_csv("keystats.csv", index_col='Date')
+    X, y = stock_prediction.build_data_set()
+    assert X.shape[0] == df.shape[0]
+    assert len(y) == df.shape[0]
+    assert X.shape[1] == len(parsing_keystats.features)
