@@ -27,7 +27,7 @@ def test_forward_sample_dimensions():
 
 def test_forward_sample_data():
     """
-    Some quick checks on the data
+    Some quick checks on the forward sample data
     """
     df = pd.read_csv('forward_sample.csv')
     # For these tests we need to fill in nan values with zero
@@ -45,6 +45,28 @@ def test_forward_sample_data():
     fractional_features = ['% Held by Insiders', '% Held by Institutions',
                            'Short Ratio', 'Short % of Float']
     assert all(df[fractional_features] <= 100)
+
+
+def test_stock_prices_dataset():
+    """
+    Check that data from pandas-datareader has been downloaded correctly
+    """
+
+    df = pd.read_csv("stock_prices.csv", index_col='Date', parse_dates=True)
+    assert type(df.index) == pd.core.indexes.datetimes.DatetimeIndex
+    # Make sure that all columns have some price data
+    assert all(df.isnull().sum() < len(df))
+    # After this, we fill in missing values with zero for test purposes
+    df.fillna(0, inplace=True)
+    assert all(df >= 0)
+
+    # Index prices
+    index_df = pd.read_csv(
+        "sp500_index.csv", index_col='Date', parse_dates=True)
+    assert type(df.index) == pd.core.indexes.datetimes.DatetimeIndex
+    assert len(index_df.columns) == 6
+    assert index_df.shape[0] == df.shape[0]
+    assert index_df.isnull().sum().sum() == 0
 
 
 @pytest.mark.xfail()
