@@ -6,7 +6,7 @@ yf.pdr_override()
 
 
 START_DATE = "2003-08-01"
-END_DATE = "2014-06-01"
+END_DATE = "2015-01-01"
 
 
 def build_stock_dataset(start=START_DATE, end=END_DATE):
