@@ -3,10 +3,11 @@ import os
 import re
 import time
 import requests
+import numpy as np
 from utils import data_string_to_float
 
 # The path to your fundamental data
-statspath = "/Users/Robert/intraQuarter/_KeyStats/"
+statspath = "intraQuarter/_KeyStats/"
 
 # These are the features that will be parsed
 features = [  # Valuation measures
@@ -69,7 +70,7 @@ def check_yahoo():
 
     # Required in macOS to remove the hidden index file.
     if '.DS_Store' in ticker_list:
-        ticker_list.remove('.DS_Store)
+        ticker_list.remove('.DS_Store')
 
     for ticker in ticker_list:
         try:
@@ -104,16 +105,16 @@ def forward():
 
     df = pd.DataFrame(columns=df_columns)
 
-    ticker_list = os.listdir(statspath)
+    tickerfile_list = os.listdir('forward/')
 
     # Required in macOS to remove the hidden index file.
-    if '.DS_Store' in ticker_list:
+    if '.DS_Store' in tickerfile_list:
         ticker_list.remove('.DS_Store')
 
     # This is the actual parsing. This needs to be fixed every time yahoo changes their UI.
-    for ticker in ticker_list:
-        ticker = ticker.upper()
-        source = open(f"forward/{ticker}.html").read()
+    for tickerfile in tickerfile_list:
+        ticker = tickerfile.split('.html')[0].upper()
+        source = open(f"forward/{tickerfile}").read()
         # Remove commas from the html to make parsing easier.
         source = source.replace(',', '')
 
@@ -143,8 +144,7 @@ def forward():
     return df.replace('N/A', np.nan)
 
 
-# Call the functions to produce the csv.
-check_yahoo()
-current_df = forward()
-
-# TODO:  testing? parsing?
+if __name__ == '__main__':
+    check_yahoo()
+    current_df = forward()
+    current_df.to_csv('forward_sample.csv', index=False)
