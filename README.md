@@ -1,29 +1,40 @@
-# MachineLearningStocks
+# MachineLearningStocks in python
 
-This project uses python and scikit-learn to make stock predictions. Concretely, we will try to use machine learning to discover the relationship between stock fundamentals (e.g PE ratio, debt/equity, float, etc) and the subsequent annual price change (compared with the index growth), based on a historical dataset of stock fundamentals and stock prices.
+MachineLearningStokcs is designed to be an intuitive and highly extensible 'template' project applying machine learning to making stock predictions.
 
-This repository represents a skeletal example of using machine learning to make stock predictions. Although it is intentionally light on features, I have tried to design it so that it is highly extensible and experimentable – please make as many modifications as you see fit. While I would not live trade based off of the predictions from this exact code, I do believe that it can be a starting point for a profitable trading system – I have actually used code based on this project to live trade, with pretty decent results (around 20% returns on backtest and 10-15% on live trading).
+Concretely, we clean and prepare a dataset of historical stock prices and fundamentals using `pandas`, then apply a `scikit-learn` classifier to discover the relationship between stock fundamentals (e.g PE ratio, debt/equity, float, etc) and the subsequent annual price change (compared with the index growth). We then conduct a simple backtest, before generating predictions on current data.
 
-Though this project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), it has quite a lot of personal significance for me. It was my first proper python project, one of my first real encounters with ML, and the first time I used git. At the start, my code was rife with bad practice and inefficiency: I have since tried to amend most of this, but please be warned that some issues may remain (feel free to raise an issue, or fork and submit a PR). Both the project and myself as a programmer have evolved a lot since the first iteration, and despite its origins in a youtube tutorial series I now think of it as 'my own'.
+While I would not live trade based off of the predictions from this exact code, I do believe that you can use this project as starting point for a profitable trading system – I have actually used code based on this project to live trade, with pretty decent results (around 20% returns on backtest and 10-15% on live trading).
+
+Though this project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), it has quite a lot of personal significance for me. It was my first proper python project, one of my first real encounters with ML, and the first time I used git. At the start, my code was rife with bad practice and inefficiency: I have since tried to amend most of this, but please be warned that some minor issues may remain (feel free to raise an issue, or fork and submit a PR). Both the project and myself as a programmer have evolved a lot since the first iteration, and despite its origins in a youtube tutorial series I now think of it as 'my own'.
 
 *As a disclaimer, this is a purely educational project. Be aware that backtested performance may often be deceptive – trade at your own risk!*
 
 ## Contents
 
 - [Overview](#overview)
-- [Acquiring data](#acquiring-data)
+- [Quickstart](#quickstart)
+- [Historical data](#historical-data)
   - [Historical stock fundamentals](#historical-stock-fundamentals)
-  - [Historical stock price changes](#historical-stock-price-changes)
-  - [Current fundamental data](#current-fundamental-data)
-- [What each file does](#what-each-file-does)
-  - [quandlData.py](#quandldatapy)
-  - [dataAcquisition.py](#dataacquisitionpy)
+  - [Historical stock price data](#historical-stock-price-data)
+  - [Historical S&P500 prices](#historical-sp500-prices)
+- [Preprocessing](#preprocessing)
+  - [Features](#features)
+    - [Valuation measures](#valuation-measures)
+    - [Financials](#financials)
+    - [Trading information](#trading-information)
+- [Backtesting](#backtesting)
+- [Current fundamental data](#current-fundamental-data)
+  - [download_historical_prices.py](#downloadhistoricalpricespy)
+  - [parse_keystats.py](#parsekeystatspy)
   - [currentData.py](#currentdatapy)
   - [stockPrediction.py](#stockpredictionpy)
 - [Dependencies](#dependencies)
+- [Unit testing](#unit-testing)
 - [Where to go from here](#where-to-go-from-here)
   - [Data acquisition](#data-acquisition)
   - [Data preprocessing](#data-preprocessing)
+  - [Machine learning](#machine-learning)
 
 ## Overview
 
@@ -51,6 +62,7 @@ python download_historical_prices.py
 python parsing_keystats.py
 python backtesting.py
 python tests.py
+python current_data.py
 python stock_prediction.py
 ```
 
@@ -148,7 +160,7 @@ Despite its importance, I originally did not want to include backtesting code in
 
 Nevertheless, because of the importance of backtesting, I decided that I can't really call this a 'skeletal machine learning stocks' project without backtesting -- the skeleton would be missing the spine.
 
-Thus, I have included a simplistic backtesting script. Please note that there is a fatal flaw with this backtesting implementation that will result in *much* higher backtesting returns. It is quite a subtle point, but I will let you figure that out :) 
+Thus, I have included a simplistic backtesting script. Please note that there is a fatal flaw with this backtesting implementation that will result in *much* higher backtesting returns. It is quite a subtle point, but I will let you figure that out :)
 
 ## Current fundamental data
 
@@ -182,14 +194,14 @@ The machine learning. Uses a linear SVM to fit the data, then predicts the outco
 
 - pandas
 
-## Code tests
+## Unit testing
 
-I have included a number of unit tests (in `tests.py`) which serve to check that things are working properly. However, due to the nature of the some of this projects functionality (downloading big datasets), you will have to run all the code once before running the tests. Otherwise, the tests themselves would have to download huge datasets (which I don't think is optimal).
+I have included a number of unit tests (in the `tests/` folder) which serve to check that things are working properly. However, due to the nature of the some of this projects functionality (downloading big datasets), you will have to run all the code once before running the tests. Otherwise, the tests themselves would have to download huge datasets (which I don't think is optimal).
 
 To run the tests, simply enter the following into a terminal instance in the project directory:
 
 ```bash
-pytest tests.py -v
+pytest -v
 ```
 
 ## Where to go from here
