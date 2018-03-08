@@ -39,6 +39,10 @@ def build_stock_dataset(start=START_DATE, end=END_DATE):
 
 
 def build_sp500_dataset(start=START_DATE, end=END_DATE):
+    """
+    Creates the dataset containing S&P500 prices
+    :returns: sp500_index.csv
+    """
     index_data = pdr.get_data_yahoo('SPY', start=START_DATE, end=END_DATE)
     index_data.to_csv("sp500_index.csv")
 
