@@ -69,13 +69,29 @@ def test_stock_prices_dataset():
     assert index_df.isnull().sum().sum() == 0
 
 
-@pytest.mark.xfail()
+def def_keystats_dimensions():
+    """
+    This tests that the keystats csv has been built correctly
+    """
+    df = pd.read_csv("keystats.csv", index_col='Date')
+
+    indexing_columns = ['Unix', 'Ticker', 'Price',
+                        'stock_p_change', 'SP500', 'SP500_p_change']
+    n_cols = len(df.columns)
+    assert n_cols == len(parsing_keystats.features) + len(indexing_columns)
+
+    # No missing data in the index columns
+    assert df[indexing_columns].isnull().sum().sum() == 0
+
+
 def test_stock_prediction_dataset():
     """
     This tests that the dataset on which we are training our algorithm has been correctly built
     """
     df = pd.read_csv("keystats.csv", index_col='Date')
+    num_rows_with_nan = sum(df.isnull().sum(axis=1) > 0)
+
     X, y = stock_prediction.build_data_set()
-    assert X.shape[0] == df.shape[0]
-    assert len(y) == df.shape[0]
+    assert X.shape[0] == df.shape[0] - num_rows_with_nan
+    assert len(y) == df.shape[0] - num_rows_with_nan
     assert X.shape[1] == len(parsing_keystats.features)
