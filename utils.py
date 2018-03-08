@@ -43,3 +43,15 @@ def duplicate_error_check(df):
             # A duplicate value of zero is quite common. We want other duplicates.
             if duplicates != {0}:
                 print(i, df.iloc[i], duplicates, sep="\n")
+
+
+def status_calc(stock, sp500, outperformance=10):
+    """A simple function to classify whether a stock outperformed the S&P500
+    :param stock: stock price
+    :param sp500: S&P500 price
+    :param outperformance: stock is classified 1 if stock price > S&P500 price + outperformance
+    :return: true/false
+    """
+    if outperformance < 0:
+        raise ValueError("outperformance must be positive")
+    return stock - sp500 >= outperformance
