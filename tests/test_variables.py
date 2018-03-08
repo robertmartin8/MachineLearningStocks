@@ -19,8 +19,3 @@ def test_features_same():
                                                                            'Shares Short (as of', 'Net Income Avl to Common'}
     assert set(current_data.features) - set(parsing_keystats.features) == {'Net Income Avi to Common', 'Quarterly Earnings Growth',
                                                                            'Shares Short', 'Quarterly Revenue Growth'}
-
-
-def test_dates_same():
-    assert parsing_keystats.START_DATE == download_historical_prices.START_DATE
-    assert parsing_keystats.END_DATE == download_historical_prices.END_DATE
