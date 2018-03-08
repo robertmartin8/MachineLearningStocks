@@ -331,4 +331,4 @@ Feel free to fork, play around, and submit PRs. I would be very grateful for any
 
 ---
 
-For more content like this, check out my academic blog at [reasonabledeviations.science/](https://reasonabledeviations.science/). Who knows, you may find some more hints about how to improve returns.
+For more content like this, check out my academic blog at [reasonabledeviations.science/](https://reasonabledeviations.science).
