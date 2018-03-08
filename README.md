@@ -17,20 +17,42 @@ Though this project was originally based on Sentdex's excellent [machine learnin
 - [Contents](#contents)
 - [Overview](#overview)
 - [Quickstart](#quickstart)
-- [0. Preliminaries](#0-preliminaries)
-- [1. Historical data](#1-historical-data)
+- [Preliminaries](#preliminaries)
+- [Historical data](#historical-data)
   - [Historical stock fundamentals](#historical-stock-fundamentals)
   - [Historical price data](#historical-price-data)
-- [2. Creating the training dataset](#2-creating-the-training-dataset)
+- [Creating the training dataset](#creating-the-training-dataset)
   - [Preprocessing historical price data](#preprocessing-historical-price-data)
   - [Features](#features)
     - [Valuation measures](#valuation-measures)
     - [Financials](#financials)
     - [Trading information](#trading-information)
   - [Parsing](#parsing)
-- [3. Backtesting](#3-backtesting)
-- [4. Current fundamental data](#4-current-fundamental-data)
-- [5. Stock prediction](#5-stock-prediction)
+- [Backtesting](#backtesting)
+- [Current fundamental data](#current-fundamental-data)
+- [Stock prediction](#stock-prediction)
+- [Unit testing](#unit-testing)
+- [Where to go from here](#where-to-go-from-here)
+  - [Data acquisition](#data-acquisition)
+  - [Data preprocessing](#data-preprocessing)
+  - [Machine learning](#machine-learning)
+- [Contributing](#contributing)
+
+
+1. [Preliminaries](#preliminaries)
+2. [Historical data](#historical-data)
+- [Historical stock fundamentals](#historical-stock-fundamentals)
+- [Historical price data](#historical-price-data)
+3. [Creating the training dataset](#creating-the-training-dataset)
+  - [Preprocessing historical price data](#preprocessing-historical-price-data)
+  - [Features](#features)
+    - [Valuation measures](#valuation-measures)
+    - [Financials](#financials)
+    - [Trading information](#trading-information)
+  - [Parsing](#parsing)
+- [Backtesting](#backtesting)
+- [Current fundamental data](#current-fundamental-data)
+- [Stock prediction](#stock-prediction)
 - [Unit testing](#unit-testing)
 - [Where to go from here](#where-to-go-from-here)
   - [Data acquisition](#data-acquisition)
@@ -70,7 +92,7 @@ python stock_prediction.py
 
 Otherwise, follow the step-by-step guide below.
 
-## 0. Preliminaries
+## Preliminaries
 
 This project uses python 3, and the common data science libraries `pandas` and `scikit-learn`. A full list of requirements is included in the `requirements.txt` file. To install all of the requirements at once, run the following code into terminal:
 
@@ -80,7 +102,7 @@ pip install -r requirements.txt
 
 To get started, clone this project and unzip it. This will become our working directory.
 
-## 1. Historical data
+## Historical data
 
 Data acquisition and preprocessing is probably the hardest part of most machine learning projects. But it is a necessary evil, so it's best to not fret and just carry on.
 
@@ -110,7 +132,7 @@ The code for downloading historical price data can be run by entering the follow
 python download_historical_prices.py
 ```
 
-## 2. Creating the training dataset
+## Creating the training dataset
 
 Our ultimate goal for the training data is to have a 'snapshot' of a particular stock's fundamentals at a particular time, and the corresponding subsequent annual performance of the stock.
 
@@ -205,7 +227,7 @@ python parsing_keystats.py
 
 You should see the file `keystats.csv` appear in your working directory. Now that we have the training data ready, we are ready to actually do some machine learning.
 
-## 3. Backtesting
+## Backtesting
 
 Backetesting is arguably the most important part of any quantitative strategy: you must have some way of testing the performance of your algorithm before you live trade it.
 
@@ -241,7 +263,7 @@ Compared to the index, our strategy earns  28.6 percentage points more
 
 Again, the performance looks too good to be true and almost certainly is.
 
-## 4. Current fundamental data
+## Current fundamental data
 
 Now that we have trained and backtested a model on our data, we would like to generate actual predictions on current data.
 
@@ -257,7 +279,7 @@ python current_data.py
 
 The script will then begin downloading the HTML into the `forward/` folder within your working directory, before parsing this data and outputting the file `forward_sample.csv`.
 
-## 5. Stock prediction
+## Stock prediction
 
 Now that we have the training data and the current data, we can finally generate actual predictions. This part of the project is very simple, so go ahead and run the script:
 
