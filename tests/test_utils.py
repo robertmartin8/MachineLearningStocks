@@ -1,21 +1,19 @@
 import pytest
-
 import utils
-import stock_prediction
 
 
 def test_status_calc():
     """
     Test the status_calc function which generates training labels
     """
-    assert stock_prediction.status_calc(50, 20, 12.2) == 1
-    assert stock_prediction.status_calc(12.003, 10, 15) == 0
-    assert stock_prediction.status_calc(-10, -30, 5) == 1
-    assert stock_prediction.status_calc(-31, -30, 15) == 0
-    assert stock_prediction.status_calc(15, 5, 10) == 1
+    assert utils.status_calc(50, 20, 12.2) == 1
+    assert utils.status_calc(12.003, 10, 15) == 0
+    assert utils.status_calc(-10, -30, 5) == 1
+    assert utils.status_calc(-31, -30, 15) == 0
+    assert utils.status_calc(15, 5, 10) == 1
 
     with pytest.raises(ValueError):
-        stock_prediction.status_calc(12, 10, -3)
+        utils.status_calc(12, 10, -3)
 
 
 def test_data_string_to_float():
