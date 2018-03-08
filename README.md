@@ -10,7 +10,7 @@ Though this project was originally based on Sentdex's excellent [machine learnin
 
 *As a disclaimer, this is a purely educational project. Be aware that backtested performance may often be deceptive – trade at your own risk!*
 
-*At some stage, this guide will likely be cross-posted at my academic blog, [reasonabledeviations.science/](https://reasonabledeviations.science/)*
+*At some stage, this guide will likely be cross-posted at my academic blog, [reasonabledeviations.science](https://reasonabledeviations.science/)*
 
 ## Contents
 
@@ -22,28 +22,6 @@ Though this project was originally based on Sentdex's excellent [machine learnin
   - [Historical stock fundamentals](#historical-stock-fundamentals)
   - [Historical price data](#historical-price-data)
 - [Creating the training dataset](#creating-the-training-dataset)
-  - [Preprocessing historical price data](#preprocessing-historical-price-data)
-  - [Features](#features)
-    - [Valuation measures](#valuation-measures)
-    - [Financials](#financials)
-    - [Trading information](#trading-information)
-  - [Parsing](#parsing)
-- [Backtesting](#backtesting)
-- [Current fundamental data](#current-fundamental-data)
-- [Stock prediction](#stock-prediction)
-- [Unit testing](#unit-testing)
-- [Where to go from here](#where-to-go-from-here)
-  - [Data acquisition](#data-acquisition)
-  - [Data preprocessing](#data-preprocessing)
-  - [Machine learning](#machine-learning)
-- [Contributing](#contributing)
-
-
-1. [Preliminaries](#preliminaries)
-2. [Historical data](#historical-data)
-- [Historical stock fundamentals](#historical-stock-fundamentals)
-- [Historical price data](#historical-price-data)
-3. [Creating the training dataset](#creating-the-training-dataset)
   - [Preprocessing historical price data](#preprocessing-historical-price-data)
   - [Features](#features)
     - [Valuation measures](#valuation-measures)
