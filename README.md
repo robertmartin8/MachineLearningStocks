@@ -1,5 +1,11 @@
 # MachineLearningStocks in python: a starter project and guide
 
+[![forthebadge made-with-python](https://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/surelyourejoking/MachineLearningStocks/blob/master/LICENSE.txt)
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 MachineLearningStocks is designed to be an intuitive and highly extensible template project applying machine learning to making stock predictions. My hope is that this project will help you understand the overall workflow of using machine learning to predict stock movements and also appreciate some of the subtleties. And of course, after following this guide and playing around with the project, you should definitely make your own improvements -- if you're struggling to think of what to do, at the end of this readme I've included a long list of possiblilities: take your pick.
 
 Concretely, we will be cleaning and preparing a dataset of historical stock prices and fundamentals using `pandas`, after which we will apply a `scikit-learn` classifier to discover the relationship between stock fundamentals (e.g PE ratio, debt/equity, float, etc) and the subsequent annual price change (compared with the an index). We then conduct a simple backtest, before generating predictions on current data.
@@ -211,7 +217,7 @@ You should see the file `keystats.csv` appear in your working directory. Now tha
 
 ## Backtesting
 
-Backetesting is arguably the most important part of any quantitative strategy: you must have some way of testing the performance of your algorithm before you live trade it.
+Backtesting is arguably the most important part of any quantitative strategy: you must have some way of testing the performance of your algorithm before you live trade it.
 
 Despite its importance, I originally did not want to include backtesting code in this repository. The reasons were as follows:
 
