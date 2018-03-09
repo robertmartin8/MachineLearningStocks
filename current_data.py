@@ -4,6 +4,7 @@ import re
 import time
 import requests
 import numpy as np
+from tqdm import tqdm
 from utils import data_string_to_float
 
 # The path to your fundamental data
@@ -72,7 +73,7 @@ def check_yahoo():
     if '.DS_Store' in ticker_list:
         ticker_list.remove('.DS_Store')
 
-    for ticker in ticker_list:
+    for ticker in tqdm(ticker_list, desc="Download progress:", unit="tickers"):
         try:
             link = f"http://finance.yahoo.com/quote/{ticker.upper()}/key-statistics"
             resp = requests.get(link)
@@ -81,7 +82,6 @@ def check_yahoo():
             save = f"forward/{ticker}.html"
             with open(save, 'w') as file:
                 file.write(resp.text)
-            print(save)
 
         except Exception as e:
             print(f"{ticker}: {str(e)}\n")
@@ -112,7 +112,7 @@ def forward():
         ticker_list.remove('.DS_Store')
 
     # This is the actual parsing. This needs to be fixed every time yahoo changes their UI.
-    for tickerfile in tickerfile_list:
+    for tickerfile in tqdm(tickerfile_list, desc="Parsing progress:", unit="tickers"):
         ticker = tickerfile.split('.html')[0].upper()
         source = open(f"forward/{tickerfile}").read()
         # Remove commas from the html to make parsing easier.
@@ -133,7 +133,7 @@ def forward():
             # The data may not be present. Process accordingly.
             except AttributeError:
                 value_list.append('N/A')
-                print(ticker, variable)
+                # print(ticker, variable)
 
         # Append the ticker and the features to the dataframe
         new_df_row = [0, 0, ticker,
