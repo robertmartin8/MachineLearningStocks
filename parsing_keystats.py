@@ -4,6 +4,7 @@ import time
 import re
 from datetime import datetime
 from utils import data_string_to_float
+from tqdm import tqdm
 
 
 # The directory where individual html files are stored
@@ -110,7 +111,8 @@ def parse_keystats(sp500_df, stock_df):
 
     df = pd.DataFrame(columns=df_columns)
 
-    for stock_directory in stock_list:
+    # tqdm is a simple progress bar
+    for stock_directory in tqdm(stock_list, desc="Parsing progress:", unit="tickers"):
         keystats_html_files = os.listdir(stock_directory)
 
         # Snippet to get rid of the .DS_Store file in macOS
