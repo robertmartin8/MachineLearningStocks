@@ -1,7 +1,8 @@
-pandas_datareader==0.5.0
 requests==2.18.4
+tqdm==4.19.5
 pytest==3.4.1
-pandas==0.22.0
-numpy==1.12.1
 fix_yahoo_finance==0.0.21
+pandas_datareader==0.5.0
+numpy==1.12.1
+pandas==0.22.0
 scikit_learn==0.19.1
