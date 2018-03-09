@@ -164,12 +164,6 @@ def parse_keystats(sp500_df, stock_df):
                         else:
                             value_list.append('N/A')
 
-                            # Print any failures that aren't the common ones.
-                            common_fails = ['Qtrly Revenue Growth', 'Operating Cash Flow', 'Levered Free Cash Flow',
-                                            'Payout Ratio', 'Qtrly Earnings Growth']
-                            if variable not in common_fails:
-                                print(ticker, file, variable)
-
             # We need the stock price and SP500 price now and one year from now.
             # Convert from unix time to YYYY-MM-DD, so we can look for the price in the dataframe
             # then calculate the percentage change.
@@ -178,7 +172,7 @@ def parse_keystats(sp500_df, stock_df):
             one_year_later = datetime.fromtimestamp(
                 unix_time + 31536000).strftime('%Y-%m-%d')
 
-            # SP500 prices now and one year later, and the perce
+            # SP500 prices now and one year later, and the percentage change
             sp500_price = float(sp500_df.loc[current_date, 'Adj Close'])
             sp500_1y_price = float(sp500_df.loc[one_year_later, 'Adj Close'])
             sp500_p_change = round(
@@ -192,7 +186,7 @@ def parse_keystats(sp500_df, stock_df):
                     stock_df.loc[one_year_later, ticker.upper()])
             except KeyError:
                 # If stock data is missing, we must skip this datapoint
-                print(f"PRICE RETRIEVAL ERROR for {ticker}")
+                # print(f"PRICE RETRIEVAL ERROR for {ticker}")
                 continue
 
             stock_p_change = round(
