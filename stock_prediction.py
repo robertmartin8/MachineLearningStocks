@@ -51,4 +51,5 @@ def predict_stocks():
 
 
 if __name__ == '__main__':
+    print("Building dataset and predicting stocks...")
     predict_stocks()
