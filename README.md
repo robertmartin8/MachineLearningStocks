@@ -54,7 +54,11 @@ This is a very generalised overview, but in principle this is all you need to bu
 
 ## Quickstart
 
-If you want to throw away the instruction manual and play immediately, clone this project, then download and unzip the [data file](https://pythonprogramming.net/data-acquisition-machine-learning/) into the same directory.
+If you want to throw away the instruction manual and play immediately, clone this project, then download and unzip the [data file](https://pythonprogramming.net/data-acquisition-machine-learning/) into the same directory. Then, open an instance of terminal and cd to the project's file path, e.g
+
+```bash
+cd Users/User/Desktop/MachineLearningStocks
+```
 
 Then, run the following in terminal:
 
@@ -78,7 +82,7 @@ This project uses python 3, and the common data science libraries `pandas` and `
 pip install -r requirements.txt
 ```
 
-To get started, clone this project and unzip it. This will become our working directory.
+To get started, clone this project and unzip it. This will become our working directory, so make sure you `cd` your terminal instance into this directory.
 
 ## Historical data
 
@@ -259,7 +263,7 @@ The script will then begin downloading the HTML into the `forward/` folder withi
 
 ## Stock prediction
 
-Now that we have the training data and the current data, we can finally generate actual predictions. This part of the project is very simple, so go ahead and run the script:
+Now that we have the training data and the current data, we can finally generate actual predictions. This part of the project is very simple: the only thing you have to decide is the value of the `OUTPERFORMANCE` parameter (the percentage by which a stock has to beat the S&P500 to be considered a 'buy'). I have set it to 10 by default, but it can easily be modified by changing the variable at the top of the file. Go ahead and run the script:
 
 ```bash
 python stock_prediction.py
