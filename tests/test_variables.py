@@ -1,8 +1,7 @@
-import pytest
 import os
 import parsing_keystats
 import current_data
-import download_historical_prices
+import stock_prediction
 
 
 def test_statspath():
@@ -19,3 +18,7 @@ def test_features_same():
                                                                            'Shares Short (as of', 'Net Income Avl to Common'}
     assert set(current_data.features) - set(parsing_keystats.features) == {'Net Income Avi to Common', 'Quarterly Earnings Growth',
                                                                            'Shares Short', 'Quarterly Revenue Growth'}
+
+
+def test_outperformance():
+    assert stock_prediction.OUTPERFORMANCE >= 0
