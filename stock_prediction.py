@@ -3,6 +3,10 @@ from sklearn.ensemble import RandomForestClassifier
 from utils import data_string_to_float, status_calc
 
 
+# The percentage by which a stock has to beat the S&P500 to be considered a 'buy'
+OUTPERFORMANCE = 10
+
+
 def build_data_set():
     """
     Reads the keystats.csv file and prepares it for scikit-learn
@@ -14,8 +18,9 @@ def build_data_set():
 
     X_train = training_data[features].values
     # Generate the labels: '1' if a stock beats the S&P500 by more than 10%, else '0'.
-    y_train = list(map(
-        status_calc, training_data["stock_p_change"], training_data["SP500_p_change"]))
+    y_train = list(status_calc(training_data["stock_p_change"],
+                               training_data["SP500_p_change"],
+                               OUTPERFORMANCE))
 
     return X_train, y_train
 
@@ -40,7 +45,7 @@ def predict_stocks():
     else:
         invest_list = z[y_pred].tolist()
         print(
-            f"{len(invest_list)} stocks predicted to outperform the S&P500 by more than 10%:")
+            f"{len(invest_list)} stocks predicted to outperform the S&P500 by more than {OUTPERFORMANCE}%:")
         print(' '.join(invest_list))
         return invest_list
 
