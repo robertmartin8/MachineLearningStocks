@@ -10,7 +10,7 @@ Concretely, we will be cleaning and preparing a dataset of historical stock pric
 
 While I would not live trade based off of the predictions from this exact code, I do believe that you can use this project as starting point for a profitable trading system – I have actually used code based on this project to live trade, with pretty decent results (around 20% returns on backtest and 10-15% on live trading).
 
-Though this project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), it has quite a lot of personal significance for me. It was my first proper python project, one of my first real encounters with ML, and the first time I used git. At the start, my code was rife with bad practice and inefficiency: I have since tried to amend most of this, but please be warned that some minor issues may remain (feel free to raise an issue, or fork and submit a PR). Both the project and myself as a programmer have evolved a lot since the first iteration, and despite its origins in a youtube tutorial series I now think of it as 'my own'.
+This project has quite a lot of personal significance for me. It was my first proper python project, one of my first real encounters with ML, and the first time I used git. At the start, my code was rife with bad practice and inefficiency: I have since tried to amend most of this, but please be warned that some minor issues may remain (feel free to raise an issue, or fork and submit a PR). Both the project and myself as a programmer have evolved a lot since the first iteration, but there is always room to improve.
 
 *As a disclaimer, this is a purely educational project. Be aware that backtested performance may often be deceptive – trade at your own risk!*
 
@@ -46,8 +46,8 @@ Though this project was originally based on Sentdex's excellent [machine learnin
 
 The overall workflow to use machine learning to make stocks prediction is as follows:
 
-1. Acquire historical fundamental data -- these are the *features* or *predictors*
-2. Acquire historical stock price data -- this is will make up the dependent variable, or label (what we are trying to predict).
+1. Acquire historical fundamental data – these are the *features* or *predictors*
+2. Acquire historical stock price data – this is will make up the dependent variable, or label (what we are trying to predict).
 3. Preprocess data
 4. Use a machine learning model to learn from the data
 5. Backtest the performance of the machine learning model
@@ -104,7 +104,7 @@ We need the S&P500 index prices as a benchmark: a 5% stock growth does not mean 
 
 Historical fundamental data is actually very difficult to find (for free, at least). Although sites like [Quandl](https://www.quandl.com/) do have datasets available, you often have to pay a pretty steep fee.
 
-It turns out that there is a way to parse this data, for free, from [Yahoo Finance](https://finance.yahoo.com/). I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On his page you will be able to find a file called `intraQuarter.zip`, which you should download, unzip, and place in your working directory. Relevant to this project is the subfolder called `_KeyStats`, which contains html files that hold stock fundamentals for all stocks in the S&P500 between 2003 and 2013, sorted by stock. However, at this stage, the data is unusable -- we will have to parse it into a nice csv file before we can do any ML.
+It turns out that there is a way to parse this data, for free, from [Yahoo Finance](https://finance.yahoo.com/). I will not go into details, because [Sentdex has done it for us](https://pythonprogramming.net/data-acquisition-machine-learning/). On his page you will be able to find a file called `intraQuarter.zip`, which you should download, unzip, and place in your working directory. Relevant to this project is the subfolder called `_KeyStats`, which contains html files that hold stock fundamentals for all stocks in the S&P500 between 2003 and 2013, sorted by stock. However, at this stage, the data is unusable – we will have to parse it into a nice csv file before we can do any ML.
 
 ### Historical price data
 
@@ -132,7 +132,7 @@ When `pandas-datareader` downloads stock price data, it does not include rows fo
 
 However, referring to the example of AAPL above, if our snapshot includes fundamental data for 28/1/05 and we want to see the change in price a year later, we will get the nasty surprise that 28/1/2006 is a Saturday. Does this mean that we have to discard this snapshot?
 
-By no means -- data is too valuable to callously toss away. As a workaround, I instead decided to 'fill forward' the missing data, i.e we will assume that the stock price on Saturday 28/1/2006 is equal to the stock price on Friday 27/1/2006.
+By no means – data is too valuable to callously toss away. As a workaround, I instead decided to 'fill forward' the missing data, i.e we will assume that the stock price on Saturday 28/1/2006 is equal to the stock price on Friday 27/1/2006.
 
 ### Features
 
@@ -221,7 +221,7 @@ Despite its importance, I originally did not want to include backtesting code in
 
 - Backtesting is messy and empirical. The code is not very pleasant to use, and in practice requires a lot of manual interaction.
 - Backtesting is very difficult to get right, and if you do it wrong, you will be deceiving yourself with high returns.
-- Developing and working with your backtest is probably the best way to learn about machine learning and stocks -- you'll see what works, what doesn't, and what you don't understand.
+- Developing and working with your backtest is probably the best way to learn about machine learning and stocks – you'll see what works, what doesn't, and what you don't understand.
 
 Nevertheless, because of the importance of backtesting, I decided that I can't really call this a 'template machine learning stocks project' without backtesting. Thus, I have included a simplistic backtesting script. Please note that there is a fatal flaw with this backtesting implementation that will result in *much* higher backtesting returns. It is quite a subtle point, but I will let you figure that out :)
 
@@ -255,7 +255,7 @@ Now that we have trained and backtested a model on our data, we would like to ge
 
 As always, we can scrape the data from good old Yahoo Finance. My method is to literally just download the statistics page for each stock (here is the [page](https://finance.yahoo.com/quote/AAPL/key-statistics?p=AAPL) for Apple), then to parse it using regex as before.
 
-In fact, the regex should be almost identical, but because Yahoo has changed their UI a couple of times, there are some minor differences. This part of the projet has to be fixed whenever yahoo finance changes their UI, and if you can't get the project to work, the problem is most likely here.
+In fact, the regex should be almost identical, but because Yahoo has changed their UI a couple of times, there are some minor differences. This part of the projet has to be fixed whenever yahoo finance changes their UI, so if you can't get the project to work, the problem is most likely here.
 
 Run the following in terminal:
 
@@ -304,8 +304,8 @@ My personal belief is that better quality data is THE factor that will ultimatel
 
 - Explore the other subfolders in Sentdex's `intraQuarter.zip`.
 - Parse the annual reports that all companies submit to the SEC (have a look at the [Edgar Database](https://www.sec.gov/edgar/searchedgar/companysearch.html))
-- Try to find websites from which to scrape fundamental data (this has been my solution).
-- Ditch US stocks and go global -- perhaps better results may be found in markets that are less-liquid. It'd be interesting to see whether the predictive power of features vary based on geography.
+- Try to find websites from which you can scrape fundamental data (this has been my solution).
+- Ditch US stocks and go global – perhaps better results may be found in markets that are less-liquid. It'd be interesting to see whether the predictive power of features vary based on geography.
 - Buy Quandl data, or experiment with alternative data.
 
 ### Data preprocessing
@@ -325,9 +325,9 @@ My personal belief is that better quality data is THE factor that will ultimatel
 Altering the machine learning stuff is probably the easiest and most fun to do.
 
 - The most important thing if you're serious about results is to find the problem with the current backtesting setup and fix it. This will likely be quite a sobering experience, but if your backtest is done right, it should mean that any observed outperformance on your test set can be traded on (again, do so at your own discretion).
-- Try a different classifier -- there is plenty of research that advocates the use of SVMs, for example. Don't forget that other classifiers may require feature scaling etc.
+- Try a different classifier – there is plenty of research that advocates the use of SVMs, for example. Don't forget that other classifiers may require feature scaling etc.
 - Hyperparameter tuning: use gridsearch to find the optimal hyperparameters for your classifier. But make sure you don't overfit!
-- Make it *deep* -- experiment with neural networks (an easy way to start is with `sklearn.neural_network`).
+- Make it *deep* – experiment with neural networks (an easy way to start is with `sklearn.neural_network`).
 - Change the classification problem into a regresion one: will we achieve better results if we try to predict the stock *price* rather than whether it outperformed?
 - Run the prediction multiple times (perhaps using different hyperparameters?) and select the *k* most common stocks to invest in. This is especially important if the algorithm is not deterministic (as is the case for Random Forest)
 - Experiment with different values of the `outperformance` parameter.
@@ -336,6 +336,8 @@ Altering the machine learning stuff is probably the easiest and most fun to do.
 ## Contributing
 
 Feel free to fork, play around, and submit PRs. I would be very grateful for any bug fixes or more unit tests.
+
+This project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), but it has since evolved far beyond that and the code is almost completely different. The complete series is also on [his website](https://pythonprogramming.net/machine-learning-python-sklearn-intro/). 
 
 ---
 
