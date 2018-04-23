@@ -14,7 +14,7 @@ This project has quite a lot of personal significance for me. It was my first pr
 
 *As a disclaimer, this is a purely educational project. Be aware that backtested performance may often be deceptive – trade at your own risk!*
 
-*At some stage, this guide will likely be cross-posted at my academic blog, [reasonabledeviations.science](https://reasonabledeviations.science/)*
+*This guide has been cross-posted at my academic blog, [reasonabledeviations.science](https://reasonabledeviations.science/)*
 
 ## Contents
 
@@ -337,7 +337,7 @@ Altering the machine learning stuff is probably the easiest and most fun to do.
 
 Feel free to fork, play around, and submit PRs. I would be very grateful for any bug fixes or more unit tests.
 
-This project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), but it has since evolved far beyond that and the code is almost completely different. The complete series is also on [his website](https://pythonprogramming.net/machine-learning-python-sklearn-intro/). 
+This project was originally based on Sentdex's excellent [machine learning tutorial](https://www.youtube.com/playlist?list=PLQVvvaa0QuDd0flgGphKCej-9jp-QdzZ3), but it has since evolved far beyond that and the code is almost completely different. The complete series is also on [his website](https://pythonprogramming.net/machine-learning-python-sklearn-intro/).
 
 ---
 
