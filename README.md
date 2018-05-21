@@ -328,9 +328,10 @@ Altering the machine learning stuff is probably the easiest and most fun to do.
 - Try a different classifier – there is plenty of research that advocates the use of SVMs, for example. Don't forget that other classifiers may require feature scaling etc.
 - Hyperparameter tuning: use gridsearch to find the optimal hyperparameters for your classifier. But make sure you don't overfit!
 - Make it *deep* – experiment with neural networks (an easy way to start is with `sklearn.neural_network`).
-- Change the classification problem into a regresion one: will we achieve better results if we try to predict the stock *price* rather than whether it outperformed?
+- Change the classification problem into a regression one: will we achieve better results if we try to predict the stock *return* rather than whether it outperformed?
 - Run the prediction multiple times (perhaps using different hyperparameters?) and select the *k* most common stocks to invest in. This is especially important if the algorithm is not deterministic (as is the case for Random Forest)
 - Experiment with different values of the `outperformance` parameter.
+- Should we really be trying to predict raw returns? What happens if a stock achieves a 20% return but does so by being highly volatile?
 - Try to plot the importance of different features to 'see what the machine sees'.
 
 ## Contributing
