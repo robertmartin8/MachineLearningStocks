@@ -20,6 +20,7 @@ This project has quite a lot of personal significance for me. It was my first pr
 
 - [Contents](#contents)
 - [Overview](#overview)
+  - [EDIT as of 24/5/18](#edit-as-of-24-5-18)
 - [Quickstart](#quickstart)
 - [Preliminaries](#preliminaries)
 - [Historical data](#historical-data)
@@ -55,6 +56,12 @@ The overall workflow to use machine learning to make stocks prediction is as fol
 7. Generate predictions from current fundamental data
 
 This is a very generalised overview, but in principle this is all you need to build a fundamentals-based ML stock predictor.
+
+### EDIT as of 24/5/18
+
+This project uses pandas-datareader to download historical price data from Yahoo Finance. However, in the past few weeks this has become extremely inconsistent – it seems like Yahoo have added some measures to prevent the bulk download of their data. I will try to add a fix, but for now, take note that `download_historical_prices.py` may be deprecated.
+
+As a temporary solution, I've uploaded `stock_prices.csv` and `sp500_index.csv`, so the rest of the project can still function.
 
 ## Quickstart
 
