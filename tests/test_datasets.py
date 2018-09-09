@@ -38,7 +38,7 @@ def test_forward_sample_data():
                          'Total Cash Per Share', 'Total Debt', '50-Day Moving Average', '200-Day Moving Average',
                          'Avg Vol (3 month)', 'Shares Outstanding', 'Float',
                          '% Held by Insiders', '% Held by Institutions', 'Shares Short',
-                         'Short Ratio', 'Short % of Float', 'Shares Short (prior month)']
+                         'Short Ratio', 'Short % of Float', 'Shares Short (prior month']
     assert all(df[positive_features] >= 0)
 
     # Make sure that these features have values less than 100 (the above checks that they are +ve)
