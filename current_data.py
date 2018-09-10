@@ -54,7 +54,7 @@ features = [  # Valuation measures
     'Shares Short',
     'Short Ratio',
     'Short % of Float',
-    'Shares Short (prior month)']
+    'Shares Short (prior month']
 
 
 def check_yahoo():
