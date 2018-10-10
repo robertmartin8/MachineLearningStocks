@@ -109,7 +109,7 @@ def forward():
 
     # Required in macOS to remove the hidden index file.
     if '.DS_Store' in tickerfile_list:
-        ticker_list.remove('.DS_Store')
+        tickerfile_list.remove('.DS_Store')
 
     # This is the actual parsing. This needs to be fixed every time yahoo changes their UI.
     for tickerfile in tqdm(tickerfile_list, desc="Parsing progress:", unit="tickers"):

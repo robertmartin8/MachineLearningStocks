@@ -54,7 +54,7 @@ features = [  # Valuation measures
     'Shares Short (as of',
     'Short Ratio',
     'Short % of Float',
-    'Shares Short (prior month)']
+    'Shares Short (prior month']
 
 
 def preprocess_price_data():
