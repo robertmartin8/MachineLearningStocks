@@ -61,10 +61,19 @@ def build_dataset_iteratively(idx_start, idx_end, date_start=START_DATE, date_en
 
     statspath = "intraQuarter/_KeyStats/"
     ticker_list = os.listdir(statspath)
+    idx_start = idx_start.upper() 
+    idx_end = idx_end.upper()
 
     df = pd.DataFrame()
+    shouldCollect = False
     # possible methods. Also works better for batches.
     for ticker in ticker_list:
+        if (shouldCollect == False) and (ticker.upper() != idx_start):
+            continue
+        
+        if(ticker.upper() == idx_start):
+            shouldCollect = True
+
         ticker = ticker.upper()
 
         stock_ohlc = pdr.get_data_yahoo(
@@ -74,9 +83,15 @@ def build_dataset_iteratively(idx_start, idx_end, date_start=START_DATE, date_en
             continue
         adj_close = stock_ohlc['Adj Close'].rename(ticker)
         df = pd.concat([df, adj_close], axis=1)
+
+        if ticker == idx_end: 
+            break
+
     df.to_csv('stock_prices.csv')
 
 
 if __name__ == "__main__":
-    build_stock_dataset()
-    build_sp500_dataset()
+     build_dataset_iteratively("a", "aapl")
+    #build_stock_dataset()
+    #build_sp500_dataset()
+    
