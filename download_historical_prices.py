@@ -92,6 +92,6 @@ def build_dataset_iteratively(idx_start, idx_end, date_start=START_DATE, date_en
 
 if __name__ == "__main__":
      build_dataset_iteratively("a", "aapl")
-    #build_stock_dataset()
-    #build_sp500_dataset()
+     build_stock_dataset()
+     build_sp500_dataset()
     
