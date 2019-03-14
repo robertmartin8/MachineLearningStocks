@@ -66,7 +66,7 @@ def build_dataset_iteratively(
     ticker_list = os.listdir(statspath)
 
     df = pd.DataFrame()
-    # possible methods. Also works better for batches.
+
     for ticker in ticker_list:
         ticker = ticker.upper()
 
