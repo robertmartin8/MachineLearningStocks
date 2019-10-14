@@ -17,7 +17,7 @@ This project has quite a lot of personal significance for me. It was my first pr
 *MachineLearningStocks predicts which stocks will outperform. But it does not suggest how best to combine them into a portfolio. I have just released [PyPortfolioOpt](https://github.com/robertmartin8/PyPortfolioOpt), a portfolio optimisation library which uses
 classical efficient frontier techniques (with modern improvements) in order to generate risk-efficient portfolios. Generating optimal allocations from the predicted outperformers might be a great way to improve risk-adjusted returns.*
 
-*This guide has been cross-posted at my academic blog, [reasonabledeviations.science](https://reasonabledeviations.science/)*
+*This guide has been cross-posted at my academic blog, [reasonabledeviations.com](https://reasonabledeviations.com/)*
 
 ## Contents
 
@@ -352,4 +352,4 @@ This project was originally based on Sentdex's excellent [machine learning tutor
 
 ---
 
-For more content like this, check out my academic blog at [reasonabledeviations.science/](https://reasonabledeviations.science).
+For more content like this, check out my academic blog at [reasonabledeviations.com/](https://reasonabledeviations.com).
