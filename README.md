@@ -23,7 +23,8 @@ classical efficient frontier techniques (with modern improvements) in order to g
 
 - [Contents](#contents)
 - [Overview](#overview)
-  - [EDIT as of 24/5/18](#edit-as-of-24-5-18)
+  - [EDIT as of 24/5/18](#edit-as-of-24518)
+  - [EDIT as of October 2019](#edit-as-of-october-2019)
 - [Quickstart](#quickstart)
 - [Preliminaries](#preliminaries)
 - [Historical data](#historical-data)
@@ -65,6 +66,10 @@ This is a very generalised overview, but in principle this is all you need to bu
 This project uses pandas-datareader to download historical price data from Yahoo Finance. However, in the past few weeks this has become extremely inconsistent – it seems like Yahoo have added some measures to prevent the bulk download of their data. I will try to add a fix, but for now, take note that `download_historical_prices.py` may be deprecated.
 
 As a temporary solution, I've uploaded `stock_prices.csv` and `sp500_index.csv`, so the rest of the project can still function.
+
+### EDIT as of October 2019
+
+I expect that after so much time there will be many data issues. To that end, I have decided to upload the other CSV files: `keystats.csv` (the output of `parsing_keystats.py`) and `forward_sample.csv` (the output of `current_data.py`).
 
 ## Quickstart
 
