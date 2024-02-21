@@ -4,7 +4,7 @@ from utils import data_string_to_float, status_calc
 
 
 # The percentage by which a stock has to beat the S&P500 to be considered a 'buy'
-OUTPERFORMANCE = 10
+OUTPERFORMANCE = 90
 
 
 def build_data_set():
