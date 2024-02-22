@@ -4,10 +4,10 @@ from utils import data_string_to_float, status_calc
 
 
 # The percentage by which a stock has to beat the S&P500 to be considered a 'buy'
-OUTPERFORMANCE = 90
+#OUTPERFORMANCE = 90
 
 
-def build_data_set():
+def build_data_set(outer_performance):
     """
     Reads the keystats.csv file and prepares it for scikit-learn
     :return: X_train and y_train numpy arrays
@@ -22,7 +22,7 @@ def build_data_set():
         status_calc(
             training_data["stock_p_change"],
             training_data["SP500_p_change"],
-            OUTPERFORMANCE,
+            outer_performance,
         )
     )
 
@@ -30,7 +30,9 @@ def build_data_set():
 
 
 def predict_stocks():
-    X_train, y_train = build_data_set()
+    outer_performance = int(input("Enter min outer performance: "))
+
+    X_train, y_train = build_data_set(outer_performance)
     # Remove the random_state parameter to generate actual predictions
     clf = RandomForestClassifier(n_estimators=100, random_state=0)
     clf.fit(X_train, y_train)
@@ -49,7 +51,7 @@ def predict_stocks():
     else:
         invest_list = z[y_pred].tolist()
         print(
-            f"{len(invest_list)} stocks predicted to outperform the S&P500 by more than {OUTPERFORMANCE}%:"
+            f"{len(invest_list)} stocks predicted to outperform the S&P500 by more than {outer_performance}%:"
         )
         print(" ".join(invest_list))
         return invest_list
