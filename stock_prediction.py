@@ -6,6 +6,19 @@ from utils import data_string_to_float, status_calc
 # The percentage by which a stock has to beat the S&P500 to be considered a 'buy'
 #OUTPERFORMANCE = 90
 
+def get_outer_performance():
+    while True:
+        try:
+            x = int(input("Enter min outer performance: "))
+        except ValueError:
+            print("Not an integer!")
+            continue
+        else:
+            if (x < 0 or x >100):
+                print("Valuse must be >=0 and <=100")
+                continue
+            else:
+                return (x)
 
 def build_data_set(outer_performance):
     """
@@ -30,7 +43,7 @@ def build_data_set(outer_performance):
 
 
 def predict_stocks():
-    outer_performance = int(input("Enter min outer performance: "))
+    outer_performance = get_outer_performance()
 
     X_train, y_train = build_data_set(outer_performance)
     # Remove the random_state parameter to generate actual predictions
