@@ -178,7 +178,7 @@ def parse_keystats(sp500_df, stock_df):
             # Convert from unix time to YYYY-MM-DD, so we can look for the price in the dataframe
             # then calculate the percentage change.
             current_date = datetime.fromtimestamp(unix_time).strftime("%Y-%m-%d")
-            one_year_later = datetime.fromtimestamp(unix_time + 31536000).strftime(
+            one_year_later = (datetime.fromtimestamp(unix_time) + pd.DateOffset(years=1)).strftime(
                 "%Y-%m-%d"
             )
 
@@ -214,7 +214,8 @@ def parse_keystats(sp500_df, stock_df):
                 sp500_p_change,
             ] + value_list
 
-            df = df.append(dict(zip(df_columns, new_df_row)), ignore_index=True)
+            new_row_df = pd.DataFrame([dict(zip(df_columns, new_df_row))])
+            df = pd.concat([df, new_row_df], ignore_index=True)
 
     # Remove rows with missing stock price data
     df.dropna(axis=0, subset=["Price", "stock_p_change"], inplace=True)
