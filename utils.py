@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def data_string_to_float(number_string):
     """
     The result of our regex search is a number stored as a string, but we need a float.
