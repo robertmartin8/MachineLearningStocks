@@ -53,7 +53,7 @@ def backtest():
     # Because y_pred is an array of 1s and 0s, the number of positive predictions
     # is equal to the sum of the array
     num_positive_predictions = sum(y_pred)
-    if num_positive_predictions < 0:
+    if num_positive_predictions == 0:
         print("No stocks predicted!")
 
     # Recall that z_test stores the change in stock price in column 0, and the
