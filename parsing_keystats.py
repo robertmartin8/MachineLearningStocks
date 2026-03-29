@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import time
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from utils import data_string_to_float
 from tqdm import tqdm
 
@@ -177,10 +177,17 @@ def parse_keystats(sp500_df, stock_df):
             # We need the stock price and SP500 price now and one year from now.
             # Convert from unix time to YYYY-MM-DD, so we can look for the price in the dataframe
             # then calculate the percentage change.
-            current_date = datetime.fromtimestamp(unix_time).strftime("%Y-%m-%d")
-            one_year_later = datetime.fromtimestamp(unix_time + 31536000).strftime(
-                "%Y-%m-%d"
-            )
+            current_datetime = datetime.fromtimestamp(unix_time)
+            current_date = current_datetime.strftime("%Y-%m-%d")
+            one_year_later_datetime = current_datetime + timedelta(days=365)
+            one_year_later = one_year_later_datetime.strftime("%Y-%m-%d")
+
+            # Check if the dates are within the data range
+            if (current_date not in sp500_df.index or 
+                one_year_later not in sp500_df.index or
+                current_date not in stock_df.index or
+                one_year_later not in stock_df.index):
+                continue
 
             # SP500 prices now and one year later, and the percentage change
             sp500_price = float(sp500_df.loc[current_date, "Adj Close"])
