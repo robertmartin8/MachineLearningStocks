@@ -28,12 +28,12 @@ features = [  # Valuation measures
     "Return on Equity",
     "Revenue",
     "Revenue Per Share",
-    "Quarterly Revenue Growth",
+    "Qtrly Revenue Growth",
     "Gross Profit",
     "EBITDA",
-    "Net Income Avi to Common",
+    "Net Income Avl to Common",
     "Diluted EPS",
-    "Quarterly Earnings Growth",
+    "Qtrly Earnings Growth",
     "Total Cash",
     "Total Cash Per Share",
     "Total Debt",
@@ -51,10 +51,10 @@ features = [  # Valuation measures
     "Float",
     "% Held by Insiders",
     "% Held by Institutions",
-    "Shares Short",
+    "Shares Short (as of)",
     "Short Ratio",
     "Short % of Float",
-    "Shares Short (prior month",
+    "Shares Short (prior month)",
 ]
 
 
@@ -129,10 +129,10 @@ def forward():
                 regex = (
                     r">"
                     + re.escape(variable)
-                    + r".*?(\-?\d+\.*\d*K?M?B?|N/A[\\n|\s]*|>0|NaN)%?"
+                    + r".*?(\-?\d+\.*\d*[Kk]?[Mm]?[Bb]?|N/[Aa][\\n|\s]*|>0|NaN|nan|n/a)%?"
                     r"(</td>|</span>)"
                 )
-                value = re.search(regex, source, flags=re.DOTALL).group(1)
+                value = re.search(regex, source, flags=re.DOTALL | re.IGNORECASE).group(1)
 
                 # Dealing with number formatting
                 value_list.append(data_string_to_float(value))
@@ -145,7 +145,8 @@ def forward():
         # Append the ticker and the features to the dataframe
         new_df_row = [0, 0, ticker, 0, 0, 0, 0] + value_list
 
-        df = df.append(dict(zip(df_columns, new_df_row)), ignore_index=True)
+        new_row = pd.DataFrame([dict(zip(df_columns, new_df_row))], columns=df_columns)
+        df = pd.concat([df, new_row], ignore_index=True)
 
     return df.replace("N/A", np.nan)
 
