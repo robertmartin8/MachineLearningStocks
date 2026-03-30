@@ -51,10 +51,10 @@ features = [  # Valuation measures
     "Float",
     "% Held by Insiders",
     "% Held by Institutions",
-    "Shares Short (as of",
+    "Shares Short (as of)",
     "Short Ratio",
     "Short % of Float",
-    "Shares Short (prior month",
+    "Shares Short (prior month)",
 ]
 
 
@@ -110,7 +110,7 @@ def parse_keystats(sp500_df, stock_df):
         "SP500_p_change",
     ] + features
 
-    df = pd.DataFrame(columns=df_columns)
+    df_rows = []
 
     # tqdm is a simple progress bar
     for stock_directory in tqdm(stock_list, desc="Parsing progress:", unit="tickers"):
@@ -214,8 +214,9 @@ def parse_keystats(sp500_df, stock_df):
                 sp500_p_change,
             ] + value_list
 
-            df = df.append(dict(zip(df_columns, new_df_row)), ignore_index=True)
+            df_rows.append(dict(zip(df_columns, new_df_row)))
 
+    df = pd.DataFrame(df_rows, columns=df_columns)
     # Remove rows with missing stock price data
     df.dropna(axis=0, subset=["Price", "stock_p_change"], inplace=True)
     # Output the CSV
