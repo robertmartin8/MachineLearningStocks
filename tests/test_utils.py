@@ -37,9 +37,17 @@ def test_data_string_to_float():
     assert utils.data_string_to_float("0M") == 0
     assert utils.data_string_to_float("010K") == 10000
 
+    # Test case-insensitivity (Bug 3 fix)
+    assert utils.data_string_to_float("4k") == 4000
+    assert utils.data_string_to_float("2m") == 2000000
+    assert utils.data_string_to_float("0.07b") == 70000000
+    assert utils.data_string_to_float("-100.1k") == -100100
+    assert utils.data_string_to_float("-0.1m") == -100000
+    assert utils.data_string_to_float("-0.02b") == -20000000
+    assert utils.data_string_to_float("n/a") == "N/A"
+    assert utils.data_string_to_float("nan") == "N/A"
+
     with pytest.raises(ValueError):
         utils.data_string_to_float(">0x")
-    with pytest.raises(ValueError):
-        utils.data_string_to_float("10k")
     with pytest.raises(ValueError):
         utils.data_string_to_float("2KB")

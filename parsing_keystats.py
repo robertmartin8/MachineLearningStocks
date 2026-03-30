@@ -51,10 +51,10 @@ features = [  # Valuation measures
     "Float",
     "% Held by Insiders",
     "% Held by Institutions",
-    "Shares Short (as of",
+    "Shares Short (as of)",
     "Short Ratio",
     "Short % of Float",
-    "Shares Short (prior month",
+    "Shares Short (prior month)",
 ]
 
 
@@ -145,10 +145,10 @@ def parse_keystats(sp500_df, stock_df):
                         regex = (
                             r">"
                             + re.escape(variable)
-                            + r".*?(\-?\d+\.*\d*K?M?B?|N/A[\\n|\s]*|>0|NaN)%?"
+                            + r".*?(\-?\d+\.*\d*[Kk]?[Mm]?[Bb]?|N/[Aa][\\n|\s]*|>0|NaN|nan|n/a)%?"
                             r"(</td>|</span>)"
                         )
-                        value = re.search(regex, source, flags=re.DOTALL).group(1)
+                        value = re.search(regex, source, flags=re.DOTALL | re.IGNORECASE).group(1)
 
                         # Dealing with number formatting
                         value_list.append(data_string_to_float(value))
@@ -162,10 +162,10 @@ def parse_keystats(sp500_df, stock_df):
                                 new_variable = ">Average Volume (3 month)"
                                 regex = (
                                     re.escape(new_variable)
-                                    + r".*?(\-?\d+\.*\d*K?M?B?|N/A[\\n|\s]*|>0)%?"
+                                    + r".*?(\-?\d+\.*\d*[Kk]?[Mm]?[Bb]?|N/[Aa][\\n|\s]*|>0)%?"
                                     r"(</td>|</span>)"
                                 )
-                                value = re.search(regex, source, flags=re.DOTALL).group(
+                                value = re.search(regex, source, flags=re.DOTALL | re.IGNORECASE).group(
                                     1
                                 )
                                 value_list.append(data_string_to_float(value))
@@ -214,7 +214,8 @@ def parse_keystats(sp500_df, stock_df):
                 sp500_p_change,
             ] + value_list
 
-            df = df.append(dict(zip(df_columns, new_df_row)), ignore_index=True)
+            new_row = pd.DataFrame([dict(zip(df_columns, new_df_row))], columns=df_columns)
+            df = pd.concat([df, new_row], ignore_index=True)
 
     # Remove rows with missing stock price data
     df.dropna(axis=0, subset=["Price", "stock_p_change"], inplace=True)
