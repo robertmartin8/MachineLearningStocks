@@ -37,9 +37,13 @@ def test_data_string_to_float():
     assert utils.data_string_to_float("0M") == 0
     assert utils.data_string_to_float("010K") == 10000
 
+    assert utils.data_string_to_float("10k") == 10000
+    assert utils.data_string_to_float("2m") == 2000000
+    assert utils.data_string_to_float("0.5b") == 500000000
+    assert utils.data_string_to_float("-5k") == -5000
+    assert utils.data_string_to_float("-0.1m") == -100000
+
     with pytest.raises(ValueError):
         utils.data_string_to_float(">0x")
-    with pytest.raises(ValueError):
-        utils.data_string_to_float("10k")
     with pytest.raises(ValueError):
         utils.data_string_to_float("2KB")

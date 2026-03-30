@@ -214,7 +214,7 @@ def parse_keystats(sp500_df, stock_df):
                 sp500_p_change,
             ] + value_list
 
-            df = df.append(dict(zip(df_columns, new_df_row)), ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([dict(zip(df_columns, new_df_row))])], ignore_index=True)
 
     # Remove rows with missing stock price data
     df.dropna(axis=0, subset=["Price", "stock_p_change"], inplace=True)

@@ -13,13 +13,7 @@ def test_statspath():
 
 
 def test_features_same():
-    # There are only four differences (intentionally)
-    assert set(parsing_keystats.features) - set(current_data.features) == {'Net Income Avl to Common', 'Qtrly Earnings Growth',
-                                                                           'Qtrly Revenue Growth', 'Shares Short (as of',
-                                                                           'Shares Short (prior month)'}
-    assert set(current_data.features) - set(parsing_keystats.features) == {'Net Income Avi to Common', 'Quarterly Earnings Growth',
-                                                                           'Shares Short', 'Quarterly Revenue Growth',
-                                                                           'Shares Short (prior month'}
+    assert set(parsing_keystats.features) == set(current_data.features)
 
 
 def test_outperformance():
