@@ -10,16 +10,17 @@ def data_string_to_float(number_string):
     :return: a float representation of the string, taking into account minus sign, unit, etc.
     """
     # Deal with zeroes and the sign
-    if ("N/A" in number_string) or ("NaN" in number_string):
+    number_string_upper = number_string.upper()
+    if ("N/A" in number_string_upper) or ("NAN" in number_string_upper):
         return "N/A"
     elif number_string == ">0":
         return 0
-    elif "B" in number_string:
-        return float(number_string.replace("B", "")) * 1000000000
-    elif "M" in number_string:
-        return float(number_string.replace("M", "")) * 1000000
-    elif "K" in number_string:
-        return float(number_string.replace("K", "")) * 1000
+    elif "B" in number_string_upper:
+        return float(number_string_upper.replace("B", "")) * 1000000000
+    elif "M" in number_string_upper:
+        return float(number_string_upper.replace("M", "")) * 1000000
+    elif "K" in number_string_upper:
+        return float(number_string_upper.replace("K", "")) * 1000
     else:
         return float(number_string)
 

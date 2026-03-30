@@ -40,6 +40,33 @@ def test_data_string_to_float():
     with pytest.raises(ValueError):
         utils.data_string_to_float(">0x")
     with pytest.raises(ValueError):
-        utils.data_string_to_float("10k")
-    with pytest.raises(ValueError):
         utils.data_string_to_float("2KB")
+
+
+def test_data_string_to_float_case_insensitive():
+    """
+    Bug Fix 3: data_string_to_float should be case-insensitive for K, M, B suffixes.
+    This test verifies that both uppercase and lowercase unit suffixes are handled correctly.
+    """
+    # Test lowercase 'k', 'm', 'b'
+    assert utils.data_string_to_float("10k") == 10000
+    assert utils.data_string_to_float("5m") == 5000000
+    assert utils.data_string_to_float("2.5b") == 2500000000
+
+    # Test mixed case
+    assert utils.data_string_to_float("10K") == 10000
+    assert utils.data_string_to_float("10k") == 10000
+    assert utils.data_string_to_float("5M") == 5000000
+    assert utils.data_string_to_float("5m") == 5000000
+
+    # Test negative values with lowercase
+    assert utils.data_string_to_float("-100.1k") == -100100
+    assert utils.data_string_to_float("-0.1m") == -100000
+    assert utils.data_string_to_float("-0.02b") == -20000000
+
+    # Test NaN variations
+    assert utils.data_string_to_float("nan") == "N/A"
+    assert utils.data_string_to_float("NaN") == "N/A"
+    assert utils.data_string_to_float("NAN") == "N/A"
+    assert utils.data_string_to_float("n/a") == "N/A"
+    assert utils.data_string_to_float("N/a") == "N/A"

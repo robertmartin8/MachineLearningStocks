@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import pytest
 
 import parsing_keystats
 import stock_prediction
@@ -92,3 +93,33 @@ def test_stock_prediction_dataset():
     assert X.shape[0] == df.shape[0] - num_rows_with_nan
     assert len(y) == df.shape[0] - num_rows_with_nan
     assert X.shape[1] == len(parsing_keystats.features)
+
+
+def test_features_names_complete():
+    """
+    Bug Fix 2: Feature names should be complete and consistent.
+    This test verifies that feature names have proper parentheses matching.
+    """
+    for feature in parsing_keystats.features:
+        # Check that parentheses are balanced
+        open_count = feature.count('(')
+        close_count = feature.count(')')
+        assert open_count == close_count, f"Feature '{feature}' has unbalanced parentheses"
+
+
+def test_pandas_append_deprecated_fix():
+    """
+    Bug Fix 1: pandas.DataFrame.append is deprecated.
+    This test verifies that parse_keystats no longer uses the deprecated append method.
+    Instead, it should collect rows in a list and create the DataFrame at the end.
+    """
+    import inspect
+    source = inspect.getsource(parsing_keystats.parse_keystats)
+
+    # Verify that append is not used on DataFrame
+    assert ".append(" not in source, "parse_keystats should not use deprecated DataFrame.append()"
+
+    # Verify that the new pattern is used (collecting rows in a list)
+    assert "df_rows = []" in source, "parse_keystats should use list to collect rows"
+    assert "df_rows.append(" in source, "parse_keystats should append to list, not DataFrame"
+    assert "pd.DataFrame(df_rows" in source, "parse_keystats should create DataFrame from list"
