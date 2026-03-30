@@ -28,12 +28,12 @@ features = [  # Valuation measures
     "Return on Equity",
     "Revenue",
     "Revenue Per Share",
-    "Quarterly Revenue Growth",
+    "Qtrly Revenue Growth",
     "Gross Profit",
     "EBITDA",
-    "Net Income Avi to Common",
+    "Net Income Avl to Common",
     "Diluted EPS",
-    "Quarterly Earnings Growth",
+    "Qtrly Earnings Growth",
     "Total Cash",
     "Total Cash Per Share",
     "Total Debt",
@@ -51,7 +51,7 @@ features = [  # Valuation measures
     "Float",
     "% Held by Insiders",
     "% Held by Institutions",
-    "Shares Short",
+    "Shares Short (as of",
     "Short Ratio",
     "Short % of Float",
     "Shares Short (prior month",
@@ -145,7 +145,7 @@ def forward():
         # Append the ticker and the features to the dataframe
         new_df_row = [0, 0, ticker, 0, 0, 0, 0] + value_list
 
-        df = df.append(dict(zip(df_columns, new_df_row)), ignore_index=True)
+        df = pd.concat([df, pd.DataFrame([dict(zip(df_columns, new_df_row))])], ignore_index=True)
 
     return df.replace("N/A", np.nan)
 

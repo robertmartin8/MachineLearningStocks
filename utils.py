@@ -9,17 +9,16 @@ def data_string_to_float(number_string):
     :param number_string: the string output of our regex, which needs to be converted to a float.
     :return: a float representation of the string, taking into account minus sign, unit, etc.
     """
-    # Deal with zeroes and the sign
     if ("N/A" in number_string) or ("NaN" in number_string):
         return "N/A"
     elif number_string == ">0":
         return 0
-    elif "B" in number_string:
-        return float(number_string.replace("B", "")) * 1000000000
-    elif "M" in number_string:
-        return float(number_string.replace("M", "")) * 1000000
-    elif "K" in number_string:
-        return float(number_string.replace("K", "")) * 1000
+    elif "B" in number_string.upper():
+        return float(number_string.upper().replace("B", "")) * 1000000000
+    elif "M" in number_string.upper():
+        return float(number_string.upper().replace("M", "")) * 1000000
+    elif "K" in number_string.upper():
+        return float(number_string.upper().replace("K", "")) * 1000
     else:
         return float(number_string)
 
