@@ -1,9 +1,7 @@
 import os
-from pandas_datareader import data as pdr
 import pandas as pd
-import fix_yahoo_finance as yf
+import yfinance as yf
 
-yf.pdr_override()
 
 START_DATE = "2003-08-01"
 END_DATE = "2015-01-01"
@@ -25,7 +23,7 @@ def build_stock_dataset(start=START_DATE, end=END_DATE):
 
     # Get all Adjusted Close prices for all the tickers in our list,
     # between START_DATE and END_DATE
-    all_data = pdr.get_data_yahoo(ticker_list, start, end)
+    all_data = all_data = yf.download(ticker_list, start=start, end=end)
     stock_data = all_data["Adj Close"]
 
     # Remove any columns that hold no data, and print their tickers.
