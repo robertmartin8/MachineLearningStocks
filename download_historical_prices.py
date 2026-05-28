@@ -1,7 +1,7 @@
 import os
 from pandas_datareader import data as pdr
 import pandas as pd
-import fix_yahoo_finance as yf
+import yfinance as yf
 
 yf.pdr_override()
 
